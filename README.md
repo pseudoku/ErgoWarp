@@ -1,6 +1,9 @@
 # Warped-keyboard
 Design Log and OpenSCAD code repo for Custom Split Keyboard
 
+![alt text](https://github.com/pseudoku/Warped-keyboard/IMG_20171216_202307.jpg "Working Prototype Version 1.1")
+
+
 Split parametrically generated keyboard. 
 
 ##Index
