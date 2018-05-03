@@ -1,7 +1,7 @@
 # -Warped-
 Design Log and Code Repo for Customizable Split Keyboard
 
-![alt text](https://raw.githubusercontent.com/seudoku/Warped-keyboard/Photo/Proto2TopView.jpg "Working Prototype Version 2.0")
+![alt text](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/Photo/Proto2TopView.jpg "Working Prototype Version 2.0")
 
 ## Index
  * Design Goal
@@ -40,7 +40,7 @@ Design Log and Code Repo for Customizable Split Keyboard
 
 
 #### Finger Placement
-![alt text](https://raw.githubusercontent.com/seudoku/Warped-keyboard/Photo/ "Working Prototype Version 2.0")
+![alt text](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/Photo/ "Working Prototype Version 2.0")
 
 Simplification of finger flexion:
  Define 2D two arcs of a finger tip during finger flexion: inner (distal and intermediate flexion) and outer(distal, intermediate, proximal flexion) with metacarpal phalangeal joint as the origin. They simulate trigger motion and grab motion respectively and it is assumed that optimal placement of key switches will be between two such functions.  
@@ -74,30 +74,31 @@ Compact column was tested, but results required continual effort to keep finger 
 #### Thumb Cluster Design
 
 During the iterative loop of columner design, I've tried to create basis for thumb cluster and early design for palm rests. Most natural thumb flexion seem to collide with index path, therefore I've initially built an arbitrary packed clusters (minor modification of ergodox thumb clusters) and attempted to find a working orientation for such cluster. One of my poor attempts seen below.
-![alt text](https://raw.githubusercontent.com/seudoku/Warped-keyboard/Photo/Dummy1BackView.jpg "")
+![alt text](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/Photo/Dummy1BackView.jpg "")
 Even earlier design considered placing keys under the columnar plate… Obviously these design process does not give one any comparable result, no reasoning behind the iteration and leads you into frivolous attempts and results.  
 
 Obviously, the solution was to model my thumb and key placement function to experiment with natural angle and motion of the thumb.
   I've come with the following List
 
-  |Switch ID| Index Color| Type of Actuation| Press Surface| Distal| Proximal|	Meta Abduction| Meta Apposition|
-  |:-------:|:-----------:|:-----------------:|:-------------:|:------:|:--------:|:--------------:|:--------------:|
-	|T0| Blue| proximal abduction| distal Face| slightly abducted| neutral | neutral| abducted|
-	|T1| Green|	apposition|	proximal Face| adducted| neutral | neutral| abducted|  
-	|T2| Red|proximal abduction|	distal Face| slightly abducted| neutral | neutral| neutral|
-	|T3| Olive| apposition|	proximal Face| adducted| neutral | neutral| neutral|
-	|T4| Pink| extension | distal tip| adducted| slightly adducted | neutral| neutral|
-	|T5| Khaki|	apposition|	distal Side| adducted| abducted | abducted| slight adducted|
-	|T6| Yellow|apposition|	distal Side| adducted| abducted | abducted| slight adducted|
-	|T7| White| apposition|	distal Side| adducted| abducted | abducted| slight adducted|
-	|T8| Grey| apposition|	distal Side| adducted| abducted | abducted| slight adducted|
-![alt text](https://raw.githubusercontent.com/seudoku/Warped-keyboard/Photo/ThumbExampl.png "")
+|Switch ID| Index Color| Type of Actuation| Press Surface| Distal| Proximal|	Meta Abduction| Meta Apposition|
+|:-------:|:-----------:|:-----------------:|:-------------:|:------:|:--------:|:--------------:|:--------------:|
+|T0| Blue| proximal abduction| distal Face| slightly abducted| neutral | neutral| abducted|
+|T1| Green|	apposition|	proximal Face| adducted| neutral | neutral| abducted|  
+|T2| Red|proximal abduction|	distal Face| slightly abducted| neutral | neutral| neutral|
+|T3| Olive| apposition|	proximal Face| adducted| neutral | neutral| neutral|
+|T4| Pink| extension | distal tip| adducted| slightly adducted | neutral| neutral|
+|T5| Khaki|	apposition|	distal Side| adducted| abducted | abducted| slight adducted|
+|T6| Yellow|apposition|	distal Side| adducted| abducted | abducted| slight adducted|
+|T7| White| apposition|	distal Side| adducted| abducted | abducted| slight adducted|
+|T8| Grey| apposition|	distal Side| adducted| abducted | abducted| slight adducted|
+
+![alt text](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/Photo/ThumbExampl.png "")
 
 ### Tracking Device
 
 #### Trackpoint
 Prototype 1 used T4 position as Trackpoint. Though not fully tested the design is not stiff enough and require some modification
-![alt text](https://raw.githubusercontent.com/seudoku/Warped-keyboard/Photo/ThumbTrackPoint.png "")
+![alt text](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/Photo/ThumbTrackPoint.png "")
 
 #### Trackpoint (Switch integration)
 make an adapter for MX key stubs to trackpoint stub. need to test keycap instability and trackpoint response is tolerable. This will move architecture away from Mitosis.
@@ -109,12 +110,12 @@ Attempted hacking M570 and strapping it on the device. unable to find orientatio
 Warpman:
 The buckled bottom row changes the effort map:
 A valid excuse to make my own layout.
-![alt text](https://raw.githubusercontent.com/seudoku/Warped-keyboard/Photo/EffortMap.png "")
+![alt text](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/Photo/EffortMap.png "")
 Also vertical flow especially transition to R0 is fast, thus Workman layout philosophy jived well on initial trial. Furthermore mitosis default layer imitating maltron layout game me the starting point. As a personal preference emphasis on rolling and same hand typing were also considered.
 
 Version 1.0
 
-![alt text](https://raw.githubusercontent.com/seudoku/Warped-keyboard/Photo/WarpmanLayout.png "")
+![alt text](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/Photo/WarpmanLayout.png "")
 
 ## _Under Construction_
 
