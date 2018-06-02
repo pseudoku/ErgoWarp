@@ -1,6 +1,13 @@
 use <Switch.scad>
 use <BatteryHolder.scad>
+//import("WARPED_lowprof.stl");
 
+// to do 
+//phone jack location
+// model cube and 
+// dip spacing and size
+// track point
+// 
 //Alias
 $fn = 60;  
 
@@ -42,9 +49,11 @@ BOTTOM = -1;
 
 finger = 1;
 RMAX   = R2;
+CStart = C1;
+CEnd = C6; 
 
 //-------------------------------------   physical parameters
-tol = 0.001;
+tol = 0.001; //
 hullThickness = 0.0001; 
 
 switchButtonTopHeight = 0; // Reference Origin 
@@ -74,9 +83,9 @@ fingerLength = [ //proxial, intermediate, distal carpal length
 //-------------------------------------   design and adjustment parameters 
 //Angles to the pathfunction 
 thetaR0 = 90; //degree defined rule const 90 deg
-thetaR2 = [62.5,59,65,66,60.5,56,60]; 
+thetaR2 = [62.5,59,65,66,60.5,56,76]; 
 //manual adjustment if needed
-thetaR1Shift = [-.8,-1,-1,0,-1.5, -2, -1.5]; // i1 i2 i3 m r p1 p2
+thetaR1Shift = [-.8,-1,-1,0,-1.5, -2, -1]; // i1 i2 i3 m r p1 p2
 thetaR3Shift = [.4,.4,.8,1,1,1,1]; // i1 i2 i3 m r p1 p2
 thetaR4Shift = [0,0,0,0,0,0,0]; 
 
@@ -89,13 +98,14 @@ thetaOffsetR4 = 0; //normal to path
 rowThetaOffset = [thetaOffsetR0, thetaOffsetR1, thetaOffsetR2, thetaOffsetR3, thetaOffsetR4];
 
 //rolling the key
-thetaRoll = [8,20,0,7,12,7,5]; // i1 i2 i3 m r p1 p2
+thetaRoll = [8,20,0,9,12,7,-40]; // i1 i2 i3 m r p1 p2
+
 thetaKnock = [[0,0,0,0,0,0,0], //R0s
               [0,0,0,0,0,0,0], //R1s
-              [-90,-90,20,20,20,20,20], //R2s
+              [0,-10,-10,0,-10,-10,-10], //R2s
               [0,0,0,0,0,0,0]]; // R3
 //Manual adjutment of the offsets to from the path 
-keycapOffsetHeight = [0,0,0,0,5,2,3]; // i1 i2 m r p 
+keycapOffsetHeight = [0,0,0,0,5,2,2]; // i1 i2 m r p 
 
 //-------------------------------------   set Parameters //dooooo not touch unless 
 plateDimension = [switchWidth+switchPlateOffsets,
@@ -108,133 +118,132 @@ dMount = 3;
 dChamfer = 6; 
   
 //shapeOrigin for 
-phi2Shift = [180,0,180,180,0,0,0];
+phi2Shift = [180,0,180,180,0,0,180];
 phi_R0 = [0,0,0,0,0,0,0];
 pathlist = [0,0,0,1,2,3,3]; 
 PathSideRm = [IN, OUT, OUT, OUT, OUT];
 
 ColumnOrigin = [ //[Column][[transition vec], [rotation vec1], [rotation vec1], ]
     [[-57,37,-8],[0,0,0],[0,90,0]], //INDEX 1 
-    [[-39.5,34.5,-4],[0,0,0],[0,90,0]], //INDEX 2 
-    [[-18.7,36,-6],[0,0,0],[0,90,0]], //INDEX3
+    [[-39.5,36,-4],[0,0,0],[0,90,0]], //INDEX 2 
+    [[-18.,36,-6],[0,0,0],[0,90,0]], //INDEX3
     [[0,36,0],[0,0,0],[0,90,0]],    //MIDDLE
-    [[19.2,37,-7],[0,0,0],[0,90,0]], //RING
-    [[43,21,-5],[0,0,-25],[0,90,4]], //PINKY1
-//     [[37.8,25,-7],[0,0,-12],[0,90,-3]], //PINKY1 previous 
-    [[60,13,-7],[0,0,-25],[0,90,4]], //PINKY2
+    [[18.3,37,-7],[0,0,0],[0,90,0]], //RING
+//    [[43,21,-5],[0,0,-25],[0,90,4]], //PINKY1
+    [[43.5,24,-5],[0,0,-45],[0,90,7]], //PINKY1 holder
+    [[68.,22.,-11],[0,0,-45],[0,90,7]], //PINKY2 holder
     [[-5,-70,-3],[0,0,0],[90,0,-3]] //Thumb
 ];
 
 OriginCnRm = [
   [ //C0
-    [0,switchButtonBottomHeight+keycapOffsetHeight[C0] ,0], //R0
+    [0,switchButtonBottomHeight+keycapOffsetHeight[C0],0], //R0
     [0,switchButtonTopHeight+keycapOffsetHeight[C0],0], //R1
     [0,switchButtonTopHeight+keycapOffsetHeight[C0],0], //R2
     [0,switchButtonTopHeight+keycapOffsetHeight[C0],0], //R3
     [0,switchButtonTopHeight+keycapOffsetHeight[C0],0]  //R4
   ], 
   [ //C1
-    [0,switchButtonBottomHeight+keycapOffsetHeight[C1] ,0], //R0
+    [0,switchButtonBottomHeight+keycapOffsetHeight[C1],0], //R0
     [0,switchButtonTopHeight+keycapOffsetHeight[C1],0], //R1
     [0,switchButtonTopHeight+keycapOffsetHeight[C1],0], //R2
-    [0 ,switchButtonTopHeight+keycapOffsetHeight[C1],0], //R3
+    [0,switchButtonTopHeight+keycapOffsetHeight[C1],0], //R3
     [0,switchButtonTopHeight+keycapOffsetHeight[C1],0]  //R4
   ], 
   [ //C2
-    [0,switchButtonBottomHeight+keycapOffsetHeight[C2] ,0], //R0
+    [0,switchButtonBottomHeight+keycapOffsetHeight[C2],0], //R0
     [0,switchButtonTopHeight+keycapOffsetHeight[C2],0], //R1
     [0,switchButtonTopHeight+keycapOffsetHeight[C2],0], //R2
     [0 ,switchButtonTopHeight+keycapOffsetHeight[C2],0], //R3
     [0,switchButtonTopHeight+keycapOffsetHeight[C2],0]  //R4
   ], 
   [ //C3
-    [0,switchButtonBottomHeight+keycapOffsetHeight[C3] ,0], //R0
+    [0,switchButtonBottomHeight+keycapOffsetHeight[C3],0], //R0
     [0,switchButtonTopHeight+keycapOffsetHeight[C3],0], //R1
     [0,switchButtonTopHeight+keycapOffsetHeight[C3],0], //R2
-    [0 ,switchButtonTopHeight+keycapOffsetHeight[C3],0], //R3
+    [0,switchButtonTopHeight+keycapOffsetHeight[C3],0], //R3
     [0,switchButtonTopHeight+keycapOffsetHeight[C3],0]  //R4
   ], 
   [ //C4
-    [0,switchButtonBottomHeight+keycapOffsetHeight[C4] ,0], //R0
+    [0,switchButtonBottomHeight+keycapOffsetHeight[C4],0], //R0
     [0,switchButtonTopHeight+keycapOffsetHeight[C4],0], //R1
     [0,switchButtonTopHeight+keycapOffsetHeight[C4],0], //R2
-    [0 ,switchButtonTopHeight+keycapOffsetHeight[C4],0], //R3
+    [0,switchButtonTopHeight+keycapOffsetHeight[C4],0], //R3
     [0,switchButtonTopHeight+keycapOffsetHeight[C4],0]  //R4
   ], 
   [ //C5
-    [0,switchButtonBottomHeight+keycapOffsetHeight[C5] ,0], //R0
+    [0,switchButtonBottomHeight+keycapOffsetHeight[C5],0], //R0
     [0,switchButtonTopHeight+keycapOffsetHeight[C5],0], //R1
     [0,switchButtonTopHeight+keycapOffsetHeight[C5],0], //R2
-    [0 ,switchButtonTopHeight+keycapOffsetHeight[C5],0], //R3
+    [0,switchButtonTopHeight+keycapOffsetHeight[C5],0], //R3
     [0,switchButtonTopHeight+keycapOffsetHeight[C5],0]  //R4
   ], 
   [ //C6
-    [0,switchButtonBottomHeight+keycapOffsetHeight[C6] ,0], //R0
+    [0,switchButtonBottomHeight+keycapOffsetHeight[C6],0], //R0
     [0,switchButtonTopHeight+keycapOffsetHeight[C6],0], //R1
     [0,switchButtonTopHeight+keycapOffsetHeight[C6],0], //R2
-    [0 ,switchButtonTopHeight+keycapOffsetHeight[C6],0], //R3
+    [0,switchButtonTopHeight+keycapOffsetHeight[C6],0], //R3
     [0,switchButtonTopHeight+keycapOffsetHeight[C6],0]  //R4
   ]
 ];
-
+shiftAngle = 4;
 ThumbPosition = [//[[thetaDist, thetaMed, thetaProx, phiProx][rotation angle][rotation angle][translation vec]]
-  [[5,30,35,0], //tip 1 R0  
+  [[6,23,25+shiftAngle ,1], //tip 1 R0  
     [0,-90,0],   //key orientation
     [0,0,0],   //key orientation
-    [0,-4,-switchPlateHeight-5] //offset vector
+    [0,-1,-switchPlateHeight-3] //offset vector
   ], 
-  [[15,5,31,6],//tip without 
-    [0,-40,0],
+  [[10,5,24.7+shiftAngle ,3.5],//tip 2
+    [0,-30,0],
     [0,0,0],   //key orientation
-    [0,-8,-switchPlateHeight-8] //tip 2  R1
+    [0,-1,-switchPlateHeight-3] //tip 2  R1
   ],
-  [[0,30,35,0],
+  [[0,23,25+shiftAngle ,1], //face1
     [0,-90,0],
     [0,0,0],   //key orientation
-    [0,-27,-switchPlateHeight-5] //palm1 U1.5 R2
+    [0,-20,-switchPlateHeight-5] //palm1 U1.5 R2
   ],
-  [[0,5,35,8],
-    [0,-40,0],
+  [[0,5,27.+shiftAngle ,3.5],  //face2
+    [0,-30,0],
     [0,0,-15],   //key orientation
-    [-4,-28.5,-switchPlateHeight-5] //[0,0,-12]), //palm2 U1.25 R3
+    [0,-20,-switchPlateHeight-4.5] //[0,0,-12]), //palm2 U1.25 R3
   ],
-  [[0,0,51,8],
-    [90,0,0],
-    [-25,0,0],   //key orientation
-    [0,10,-switchPlateHeight-11] //push 2 R4
+  [[0,0,36.2+shiftAngle ,2], //face3
+    [0,30,0],
+    [0,0,0],   //key orientation
+    [0,-17,-switchPlateHeight-4.] //push 2 R4
   ],
   [[5,0,44,15],
     [90,0,0],
     [-25,0,0],   //key orientation
     [0,18,-switchPlateHeight-11] //push 2 R5
   ], 
-  [[5,0,39,10],
+  [[5,0,32.5+shiftAngle ,3], //Tip3
     [0,0,0],
     [0,0,0],   //key orientation
-    [0,-7,-switchPlateHeight-5] //push3 R6
+    [0,1,-switchPlateHeight-3] //push3 R6
   ],
-  [[5,0,46.5,3],
-    [0,45,0],
+  [[5,0,39.5+shiftAngle ,-2], //tip 4
+    [0,50,0],
     [0,0,0],   //key orientation
-    [0,-5,-switchPlateHeight-5] //push4 R7
+    [0,2,-switchPlateHeight-3] //push4 R7
   ],
   [[0,0,44,13],// Mount Point 
     [29,0,0],
     [0,0,0],   //key orientation
     [0,0,-switchPlateHeight-15] //push4 R7
   ],
-  [[16.,15,41,3],// traackpoooint
-    [90,0,0],
-    [0,0,11],   //key orientation
-    [0,0,-switchPlateHeight-13] //push 2 R5
+  [[5.,0,27,-2],// traackpoooint
+    [60,0,0],
+    [0,0,0],   //key orientation
+    [0,5,-switchPlateHeight-9] //push 2 R5
   ],
-  [[5,30,35,0],// Mount 2 
+  [[2,23,25,-2],// Mount 2 
     [0,-90,0],
     [0,0,0],   //key orientation
-    [0,-15.5,-switchPlateHeight-12.] //palm1 U1.5 R2
+    [0,-14,-switchPlateHeight-10.] //palm1 U1.5 R2
   ],
 ];
-
 // This is the Parametric function 
 function PathStruct(theta) = //PathStruct(theta)[column][path][side] 
 10*[[//index
@@ -405,11 +414,11 @@ module PlaceOnRoll(rollAngle =0 , offsets = -1) // set rotation origin on the pl
 
 module PlaceOnKnock(rollAngle =0 , offsets = -1) // set rotation origin on the plate top edge
 {
-    function KnockOrigin() = offsets*[-4,-switchPlateOffsets/2-switchWidth/2-10,0];
+    function KnockOrigin() = offsets*[-10,-switchPlateOffsets/2-switchWidth/2-2,0];
     translate(-KnockOrigin())rotate([0,0,rollAngle])translate(KnockOrigin())children();
 }
 
-module OnThumb(thetaDist, thetaMed, thetaProx, phiProx, stick = false )
+module OnThumb(thetaDist, thetaMed, thetaProx, phiProx, stick = false)
 {
   radius_meta = 52; //metacarpals
   radius_proximal = 35;// proximal phalanges
@@ -475,7 +484,7 @@ module BuildRmCn(row, col)
 
 module BuildSets()
 {
-  for(cols = [C1:C5]){
+  for(cols = [CStart:CEnd]){
     for(rows = [R0:RMAX]){
       BuildRmCn(rows, cols)children();
     }
@@ -694,175 +703,6 @@ module BuildWebs(plateThickness, webWidth, offsets, sides =TOP, col=0)//hull bet
   }
 }
 
-
-module BuildWebsCase(plateThickness, webWidth, offsets, sides =TOP, col= C4, cuts = false)//hull between plates
-{
-   refDim =plateDimension +[0,0,offsets];
-   buildDim =[webWidth, plateDimension[1], plateThickness];
-  
-  //top cuts
-  {
-    hull() 
-      {
-        BuildRmCn(RMAX, col)modulate(refDim,[RIGHT,BACK,sides], buildDim-[0,2.5/2,0], [LEFT,FRONT,BOTTOM],Hull = true, hullSide = [RIGHT,0,0]);
-        BuildRmCn(RMAX, col+1)modulate(refDim,[LEFT,BACK,sides], buildDim-[0,2.5/2,0], [RIGHT,FRONT,BOTTOM],Hull = true, hullSide = [0,0,BOTTOM]);
-      }
-    for (row = [R2]){ //ADJUSTMENT ROW SIZE
-      hull()
-      {
-        BuildRmCn(row, col)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [RIGHT,0,0]);
-        BuildRmCn(row, col+1)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [0,0,BOTTOM]);
-      }
-      
-      if (row < RMAX)//ADJUSTMENT ROW SIZE
-      {
-        hull()
-        {
-          BuildRmCn(row, col)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [RIGHT,FRONT,0]);
-          BuildRmCn(row+1, col)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [RIGHT,BACK,0]);
-          BuildRmCn(row, col+1)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,BOTTOM]);
-          BuildRmCn(row+1, col+1)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [0,BACK,BOTTOM]);
-        }
-      }
-    }
-  }
-  
-  //internal cuts 
-  
-   if(cuts == false){
-    hull() 
-      {
-        BuildRmCn(RMAX, col)modulate(refDim,[RIGHT,BACK,sides], buildDim-[0,2.5/2,0], [LEFT,FRONT,BOTTOM],Hull = true, hullSide = [RIGHT,0,0]);
-        BuildRmCn(RMAX, col+1)modulate(refDim,[LEFT,BACK,sides], buildDim-[0,2.5/2,0], [RIGHT,FRONT,BOTTOM],Hull = true, hullSide = [LEFT,0,0]);
-      }
-    for (row = [R2]){ //ADJUSTMENT ROW SIZE
-      hull()
-      {
-        BuildRmCn(row, col)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [RIGHT,0,0]);
-        BuildRmCn(row, col+1)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [LEFT,0,0]);
-      }
-      
-      if (row < RMAX)//ADJUSTMENT ROW SIZE
-      {
-        hull()
-        {
-          BuildRmCn(row, col)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [RIGHT,FRONT,0]);
-          BuildRmCn(row+1, col)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [RIGHT,BACK,0]);
-          BuildRmCn(row, col+1)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [LEFT,FRONT,0]);
-          BuildRmCn(row+1, col+1)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [LEFT,BACK,0]);
-        }
-      }
-    }
-  }
-}
-
-module BuildWebsMod(plateThickness, webWidth, offsets, sides =TOP)//hull between plates
-{
-   refDim =plateDimension +[0,0,offsets];
-   buildDim =[webWidth, plateDimension[1], plateThickness];
-  
-  
-  // C2 -> C3  
-  for (row = [R0:RMAX])  //ADJUSTMENT ROW SIZE
-  {
-    hull()
-    {
-      BuildRmCn(row, C2)modulate(refDim,[RIGHT,0,sides], buildDim, [RIGHT,0,BOTTOM]);
-      BuildRmCn(row, C3)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM]);
-    }
-    if (row < RMAX)//ADJUSTMENT ROW SIZE
-    {
-      hull()
-      {
-        BuildRmCn(row, C2)modulate(refDim,[RIGHT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-        BuildRmCn(row+1, C2)modulate(refDim,[RIGHT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-        BuildRmCn(row, C3)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-        BuildRmCn(row+1, C3)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-      }
-    }
-  }
-  // C3 -> C4 
-  for (row = [R1:RMAX])  //ADJUSTMENT ROW SIZE
-  {
-    hull()
-    {
-      BuildRmCn(row, C3)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM]);
-      BuildRmCn(row, C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM]);
-    }
-    if (row < RMAX)//ADJUSTMENT ROW SIZE
-    {
-      hull()
-      {
-        BuildRmCn(row, C3)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-        BuildRmCn(row+1, C3)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-        BuildRmCn(row, C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-        BuildRmCn(row+1, C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-      }
-    }
-  }
-  
-  // C4 -> C5 
-  hull()
-  {
-    BuildRmCn(R0, C3)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM]);
-    BuildRmCn(R0, C5)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM]);
-  }
-  
-  for (row = [R1:RMAX])  //ADJUSTMENT ROW SIZE
-  {
-    if (row > R1)//ADJUSTMENT ROW SIZE
-    {
-      hull()
-      {
-        BuildRmCn(row, C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM]);
-        BuildRmCn(row, C5)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM]);
-      }
-    }
-    if (row < RMAX)//ADJUSTMENT ROW SIZE
-    {
-      hull()
-      {
-        BuildRmCn(row,   C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-        BuildRmCn(row+1, C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-        BuildRmCn(row,   C5)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-        BuildRmCn(row+1, C5)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-      }
-    }
-  }  
-  
-  hull()
-  {
-    BuildRmCn(R1, C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-    BuildRmCn(R1, C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-    BuildRmCn(R1, C5)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-    BuildRmCn(R2, C5)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-  }
- 
-  hull()
-  {
-    BuildRmCn(R1, C5)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-    BuildRmCn(R1, C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-    BuildRmCn(R1, C5)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-    BuildRmCn(R1, C5)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-  }
-   
-  hull()
-  {
-    BuildRmCn(R0, C5)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-    BuildRmCn(R1, C5)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-    BuildRmCn(R0, C3)modulate(refDim + [0,0,3],[RIGHT,0,sides], buildDim - [0,0,1.5], [LEFT,0,BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-    BuildRmCn(R1, C3)modulate(refDim+ [0,0,3],[RIGHT,0,sides], buildDim- [0,0,1.5], [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-  }
-  
-  hull()
-  {
-    BuildRmCn(R1, C5)modulate(refDim,[LEFT,0,sides], buildDim, [RIGHT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-    BuildRmCn(R1, C4)modulate(refDim,[RIGHT,0,sides], buildDim, [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-    BuildRmCn(R1, C3)modulate(refDim+ [0,0,3],[RIGHT,0,sides], buildDim- [0,0,1.5], [LEFT,0,BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-  }
-  
-}
-
 module BuildInnerWebs(col, sides = RIGHT)
 {
   innnerWebDim =  [hullThickness,plateDimension[1],hullThickness];
@@ -953,20 +793,22 @@ module BuildThumbB(sides = 0,  offsets = 0, frameThickness = plateDimension[2], 
         BuildRmCn(R0, C1)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [LEFT,0,BOTTOM]);
       }           
       
-      hull(){
-        PlaceOnThumb(9)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [0,BOTTOM,0]);
-        PlaceOnThumb(5)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [LEFT,0,0]);
-      } 
+//      #hull(){
+//        PlaceOnThumb(9)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [0,BOTTOM,0]);
+//        PlaceOnThumb(5)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [LEFT,0,0]);
+//      } 
       
-       hull(){
+      hull(){
         PlaceOnThumb(9)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [0,BOTTOM,0]);
         PlaceOnThumb(5)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [LEFT,BOTTOM,0]);
         PlaceOnThumb(6)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [LEFT,FRONT,0]);
       } 
+      
       hull(){
         PlaceOnThumb(9)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [RIGHT,0,0]);
-        PlaceOnThumb(5)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [LEFT,FRONT,0]);
+        PlaceOnThumb(5)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [LEFT,0,0]);
       } 
+      
       hull(){
         PlaceOnThumb(5)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [RIGHT,0,0]);
         PlaceOnThumb(4)modulate(plateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = true, hullSide = [LEFT,0,0]);
@@ -1017,6 +859,16 @@ module BuildThumbB(sides = 0,  offsets = 0, frameThickness = plateDimension[2], 
         }
       }
       
+      //trackpoint 
+      trackRef = [0,0,0];
+      
+      #PlaceOnThumb(9)translate(trackRef)cylinder(d =13, 5);
+      #PlaceOnThumb(9)translate(trackRef)cylinder(d =8, 10, center = true);
+      
+      #PlaceOnThumb(9)translate(trackRef+[19/2,0,0])cylinder(d =3, 10, center =true);
+      #PlaceOnThumb(9)translate(trackRef+[-19/2,0,0])cylinder(d =3, 10, center =true);
+      PlaceOnThumb(9)translate(trackRef+[19/2,0,-1.3])cylinder(d1 =4.5, d2 = 4.5, 3);
+      PlaceOnThumb(9)translate(trackRef+[-19/2,0,-1.3])cylinder(d1 =4.5, d2 = 4.5, 3);
        //mounts
       //PlaceOnThumb(8)translate([0,0,8])cylinder(d1 =dMount, d2= dChamfer, 2.5, center = true);
       //%PlaceOnThumb(8)cylinder(d= dMount, 90, center = true);
@@ -1177,7 +1029,6 @@ module BuildThumbC(plateThickness = 2, offsets = caseSpacing+1, web = 1, Mount =
       rotate([0,0,-30])translate([3.2, 0, -20])  cylinder(d = 5.1054, 20); //center hole for mounting 
     }
   }
- 
 }
 
 
@@ -1203,24 +1054,23 @@ module BuildTopPlate(keyhole = false, Mount = true, channel = false)
 {
   difference(){
     union(){//SwitchPlate
-      for(cols = [C1:C5]){
-        BuildColumn(plateDimension[2]+4.5, 0, TOP, cols);
-        if (cols < C5){
-          BuildWebs(plateDimension[2]+4.5, webThickness, 0, TOP, cols);
+      for(cols = [CStart:CEnd]){
+        BuildColumn(plateDimension[2]+1, 0, TOP, cols);
+        if (cols < CEnd){
+          BuildWebs(plateDimension[2]+1, webThickness, 0, TOP, cols);
         }
       }
     }
     
-    
     union(){// cuts
-      for(cols = [C1:C5]){//SwitchPlate
-        BuildPlate(10, plateDimension[2]+3.6, BOTTOM, cols);
-        BuildChannel(2, plateDimension[2]+3.6-2, BOTTOM, cols);
+      for(cols = [CStart:CEnd]){//SwitchPlate
+//        BuildPlate(10, plateDimension[2]+3.6, BOTTOM, cols);
+//        BuildChannel(2, plateDimension[2]+3.6-2, BOTTOM, cols);
         hull(){//intra column internal cuts
           BuildInnerWebs(cols, sides = RIGHT);
           BuildInnerWebs(cols, sides = LEFT);
         }
-        if (cols < C5){
+        if (cols < CEnd){
          hull(){//inter column internal cuts
             BuildInnerWebs(cols, sides = RIGHT);
             BuildInnerWebs(cols+1, sides = LEFT);
@@ -1245,8 +1095,6 @@ module BuildTopPlate(keyhole = false, Mount = true, channel = false)
       if(keyhole == true){
         BuildSets()Keyhole();
       }
-      //channel plate
-      BuildWebsCase(5, webThickness,plateDimension[2]+3.6-8, BOTTOM);
     }
   }
 }
@@ -1260,13 +1108,15 @@ MasterLogic = false;
 module BaseTrans() {translate([0,0,65])rotate([0,0,0])children();}
     //translate([0,0,67.6])rotate([10,20,0])children();
 
-BaseTrans()BuildTopPlate(keyhole = true, Mount = false, channel = false);
+
+//##################   Section E:: Bases    ##################
+//BaseTrans()BuildTopPlate(keyhole = true, Mount = false, channel = false);
 // BuildPalm_Mount();
-//color("gold")BaseTrans()BuildThumbB(keyhole = false);
+//BaseTrans()BuildThumbB(keyhole = false);
 //  BuildThumbC(keyhole = false);
 //  BaseTrans()PalmMold(keyhole = false);
 
-//##################   Section E:: Bases    ##################
+
 //color("silver")BaseTrans()translate([0,-32,-20])sphere(d = 40 );
 //#BaseTrans()translate([20,0,-10])rotate([0,90,0])TrackBall();
 
@@ -1275,11 +1125,11 @@ BaseTrans()BuildTopPlate(keyhole = true, Mount = false, channel = false);
 
 //##################   Section F:: ETC    ##################
 
-//BaseTrans()for(i = [0:9])PlaceOnThumb(Rn = i)Switch();
+
   
 module BuildSets2()
 {
-  for(cols = [C1:C6])
+  for(cols = [C1:CEnd])
   {
     for(rows = [R0:RMAX])
     {
@@ -1288,16 +1138,18 @@ module BuildSets2()
   }
 }
 
+BaseTrans()for(i = [0:9])PlaceOnThumb(Rn = i)Switch();
+//BaseTrans()PlaceOnThumb(9)rotate([0,0,180])TrackPoint();
 //BuildColumn(plateThickness, offsets, sides =TOP, col=0);
 // BuildRmCn(2, 0)Switch();
-// BuildRmCn(1, 0)Switch();
-//BuildSets2()Switch();
+Switch();
+BaseTrans()BuildSets2()Switch();
 //BuildColumn(plateDimension[2], 0, TOP, C1);
 //BuildColumn(plateDimension[2], 0, TOP, C2);
 //BuildColumn(plateDimension[2], 0, TOP, C3);
 //BuildColumn(plateDimension[2], 0, TOP, C4);
 //BuildColumn(plateDimension[2], 0, TOP, C5);
-//BuildColumn(plateDimension[2], 0, TOP, C6);
+//#BaseTrans()BuildColumn(plateDimension[2], 0, TOP, C6);
 
 
 

@@ -45,13 +45,13 @@ Design Log and Code Repo for Customizable Split Keyboard
 Simplification of finger flexion:
  Define 2D two arcs of a finger tip during finger flexion: inner (distal and intermediate flexion) and outer(distal, intermediate, proximal flexion) with metacarpal phalangeal joint as the origin. They simulate trigger motion and grab motion respectively and it is assumed that optimal placement of key switches will be between two such functions.  
 
- Using a CAD program I developed following ad hoc generalization that will accommodate MX switches in the arcs.
+ Using a CAD program I developed following ad hocish rule that will accommodate MX switches in the arcs.
 
 	a. Define R0 as a natural trigger, orientated tangential to the inner arc at θ=~ 90°  to simulate full adbuction
 	b. Define R2 as a natural tap, orientated normal to the outer arc at θ= ~60°
 	c. Define R1 as a neutral position (a combination of the former two)
 		i.  Define secondary origin, an intermediate joint of a finer.
-        ii. An angle bisected by vectors pointing to the secondary origin R0 and R2 position.
+    ii. An angle bisected by vectors pointing to the secondary origin R0 and R2 position.
 		iii. Intersection of such vector to the outer path orientated normal to the path.
 	d. Define R3 a mirror of R1 across vector defined by intermediate joint and R2
 	e. _Define R4 as a Knock|Flick (not currently implemented in the prototypes)_
@@ -98,10 +98,10 @@ cylinder represents the thumb. (thumb cluster ver2)
 ### Trackpoint
 Prototype 1 used T4 position as Trackpoint. Though not fully tested the design is not stiff enough and require some modification
 ![TrackPoint](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/ThumbTrackPoint.png)
-integrating trackpoint on T4 position
 
 ### Trackpoint (Switch integration)
 make an adapter for MX key stubs to trackpoint stub. need to test keycap instability and trackpoint response is tolerable. This will move architecture away from Mitosis.
+
 
 ### Trackball (not in dev at this point)
 Attempted hacking M570 and strapping it on the device. unable to find orientation that will work with the current implementation of palm rest/battery casing unless sacrificing portion of thumb cluster.
@@ -113,9 +113,12 @@ A valid excuse to make my own layout.
 ![Layout Effort](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/EffortMap.png)
 vertical transition, especially to R0 is fast, thus Workman layout philosophy jived well on initial trial. Furthermore, mitosis default layer imitating maltron layout gave me the starting point for the thumb cluster. As a personal preference, emphasis on rolling and same hand typing were also considered.
 
-Version 1.2
+#### Warpman Version 1.2
 
 ![Layout warpman](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/WarpmanLayout.png)
+
+Thumb clusters are
+
 
 ## _Under Construction_
 
