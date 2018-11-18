@@ -133,7 +133,7 @@ module Stabilizer(offsets = 23.8/2){
 
 Switch();
 //Keyhole(.1);
-//Stabilizer(20);
+Stabilizer(20);
 
 module TrackPoint(nibLength = 20)
 {
