@@ -31,7 +31,7 @@ Design Log and Code Repo for Customizable Split Keyboard
 
 ## Design
 ### Finger Placement
-![Prototype2](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/)
+![Prototype 7 Mockup](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Proto7.jpg)
 
 Simplification of finger flexion:
  Define two arcs: inner (distal and intermediate flexion) and outer(distal, intermediate, proximal flexion) with metacarpal phalangeal joint as the origin. They simulate trigger motion and grab motion respectively and it is assumed that optimal placement of key switches will reside somewhere between two functions.  
