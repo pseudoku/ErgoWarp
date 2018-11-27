@@ -7,13 +7,12 @@ Design Log and Code Repo for Customizable Split Keyboard
 ## Index
  * Design Goal
  * Todo
- * Design
+ * Designs
   * Finger Placement
   * Thumb Cluster
   * Tracking Device
- * Alternate Layout
- * How to Generate
-   * _Clojure based build?_
+ * Warpman a layout to consider
+ * Unholy Acts
 
 ## Design Goal:
 * Customizable Parametric Function
@@ -24,10 +23,11 @@ Design Log and Code Repo for Customizable Split Keyboard
   * _in progress_
 * Alternate Layout
 
-## Todo (11/06/2018)
+## Todo (11/22/2018)
 * Test Trackpoint Module
 * Generalize the Path function
-* Clean up code
+* Clean up codes
+* Grammar
 
 ## Design
 ### Finger Placement
@@ -36,12 +36,13 @@ Design Log and Code Repo for Customizable Split Keyboard
 Simplification of finger flexion:
  Define two arcs: inner (distal and intermediate flexion) and outer(distal, intermediate, proximal flexion) with metacarpal phalangeal joint as the origin. They simulate trigger motion and grab motion respectively and it is assumed that optimal placement of key switches will reside somewhere between two functions.  
 
-	a. Define R0 as a natural trigger, orientated tangential to the inner arc at θ=~ 90°  to simulate full adbuction
-	b. Define R2 as a natural tap, orientated normal to the outer arc at θ= ~60°
-	c. Define R1 as a neutral position (a combination of the former two)
-		i.  Define secondary origin, an intermediate joint of a finer.
-    ii. An angle bisected by vectors pointing to the secondary origin R0 and R2 position.
-		iii. Intersection of such vector to the outer path orientated normal to the path.
+* Define R0 as a natural trigger, orientated tangential to the inner arc at θ=~ 90°  to simulate full adbuction
+* Define R2 as a natural tap, orientated normal to the outer arc at θ= ~60°
+* Define R1 as a neutral position (a combination of the former two)
+ * Define secondary origin, an intermediate joint of a finer.
+ * An angle bisected by vectors pointing to the secondary origin R0 and R2 position.
+ * Intersection of such vector to the outer path orientated normal to the path.
+* "But I wanna more row switches!" See Unholy Acts Sections
 
 TODO add description on roll
 
@@ -81,6 +82,7 @@ Prototype 1 used T4 position as Trackpoint. Though not fully tested the design i
 
 * Trackpoint with Switch integration
 An adapter for MX key stubs to trackpoint stub. compounding with navigation layer was attractive. Tried with prototypes 4 and 5. produced mushy feel and noise.
+![Proto 5](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Proto5.jpg)
 
 * Trackball (not in dev at this point)
 hacking and modding M570 maybe feasible, but will reduce portability and further reduce thumb cluster.  
@@ -97,5 +99,16 @@ vertical transition, especially to R0 is fast, thus Workman layout philosophy ji
 
 ![Layout warpman](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/WarpmanLayout.jpg)
 
-### Build Guide
-Are you serious?  
+## Unholy Acts: R4 and Beyond
+So you wanna more switched with out compromising comfort? and willing to commit heinous things and the unspeakable? me too, me too. now read on...
+### Clipping Switches and Keycaps
+Sacrifice your switches and clip the unnecessarily LED compartment (unless you have access to healthy supply of compact SKCL, then, weeell GOOD for you!) and print a keycaps or clip your keycaps as well. (RIP Olivia and Godspeed) Now, apply this on R3 and cram that R4.
+![I dare you to do this on a holy panda.](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Clipped1.jpg)
+![Now Kisssssssss!](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Clippedl2.jpg)
+
+### Flick Switches
+ This thing is not warped enough and still somewhat conceivable as a keyboard. Fret not, because we can get to DataHand territory of bewilderment!
+ there is another motion you have not considered. YES! ~~Flipping~~ Flicking off motion. rotate your RMax by 90 degree or thereabout.
+
+ ![and voila abomination is born](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Flicked.jpg)
+ ![Take it to the next Level](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Ver8.jpg)
