@@ -18,7 +18,7 @@ takes about 16 hours to print.
  post cure in sun or ultraviolet led. white resin will yellow if too intense so again patience.
 
 ### Post process
- this SLA print requires some post process sanding on some surface else cap will clip and switches nub to seat properly.
+ this SLA print requires some post process sanding on some surface
  notorious ones being R1C3 and R1C4.
  lightly sand nubs and check to see if switches seats without excessive force.
 

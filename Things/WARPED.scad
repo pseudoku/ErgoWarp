@@ -1,6 +1,4 @@
 use <Switch.scad> //modules for mx switch and key holes 
-//use <RightHandParameter.scad>
-//use <LeftHandParameter.scad>
 
 $fn = 60;  
 //-----  Alias
@@ -79,11 +77,11 @@ ThetaR1Shift = [ -1,  -1,  -1,   0, -1.5,  -4,-1.5];  // set adjustment angle ca
 ThetaR3Shift = [-12, -12, -11, -10,  -10, -18, -24];  // set adjustment angle calculated R3 Angle
 ThetaR4Shift = [  0,   0,   0,   0,    0,   0,   0];  // set adjustment angle calculated R4 Angle
 
-ThetaRoll    = [ 20,  20,   0,   9,   12,   7, -20];  // column rolling angle for the keysz
+ThetaRoll    = [ 20,  20,   5,   9,   12,   7, -20];  // column rolling angle for the keysz
 
 ThetaKnock   =[[  0,   0,   0,  -5,    0,   0,   0],  //Manual Adjustment of Pitches post Calculation for minor adjustment
                [  0,   0,   0,   0,    0,   0,   0],  //R1s
-               [  0,  -5,  -5,   0,  -10,   4,   4],  //R2s   right p1&2 = 5  left p1&2 = 10 
+               [  0,  -5,  -5,   0,  -10,   4,   2],  //R2s   right p1&2 = 5  left p1&2 = 10 
                [  0,  -5,  -5,   0,  -10,   5,   5],  //R3
                [  0,   0,   0,   0,    0,   0,   0]   //R4
                ];
@@ -94,7 +92,7 @@ Phi2Shift    = [  0,   0, 180, 180,    0, 180,   0]; // ad hoc solution when sol
 Pathlist     = [  0,   0,   0,   1,    2,   3,   3]; // Path function to apply on column
 
 Clipped      =[[  4,   0,   0,   0,    0,   0,  -4],  
-               [  4,   0,   0,   0,    0,  -4, - 4],  //R1s
+               [  4,   0,   0,   0,    0,  -4,  -4],  //R1s
                [  4,  -4,  -4,  -4,   -4,   4,  -4],  //R2s   right p1&2 = 5  left p1&2 = 10 
                [  4,   4,   4,   4,    4,   4,  -4],  //R3
                [  4,   4,   4,   4,    4,   4,   0]   //R4
@@ -127,7 +125,7 @@ ColumnOrigin = [//[transition vec]  [rotation vec1] [rotation vec2]
                 [[    0,  36,   0], [0,    0,   0], [ 0, 90,  0]], //MIDDLE knuckle
                 [[ 18.3,  37,  -7], [0,    0,   0], [ 0, 90,  0]], //RING knuckle
                 [[ 43.5,  24,  -5], [0,    0, -42], [ 0, 90,  7]], //PINKY 1 knuckle
-                [[   55,   9,  -9], [0,    0, -43], [ 0, 90,  7]], //PINKY 2 knuckle
+                [[   57.5,10.5,-7.5], [0,    0, -43], [ 0, 90,  7]], //PINKY 2 knuckle
                 [[   48, -63,  30], [10, -27,  15], [90,  0, -3]]  //Thumb wrist root
                ];
 
@@ -268,11 +266,11 @@ ThumbPosition =
 //-------  END SOLVER
   
 
-//gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg#########  Supporting Modules for Main Builder Modules
+//#########  Supporting Modules for Main Builder Modules
 function hadamard(a, b) = !(len(a) > 0) ? a*b : [ for (i = [0:len(a) - 1]) hadamard(a[i], b[i])]; // elementwise mult
-  
-// for simplifying hulling operation since they don't support 2d to 3d hull use small cube to emulate
-module hullPlate(referenceDimensions = [0,0,0], offsets = [0,0,0]) 
+
+//Convinient notation for hulling a cube by face/edge/point
+module hullPlate(referenceDimensions = [0,0,0], offsets = [0,0,0])
 { 
   x = offsets[0] == 0 ?  referenceDimensions[0]:HullThickness;
   y = offsets[1] == 0 ?  referenceDimensions[1]:HullThickness;
@@ -280,7 +278,7 @@ module hullPlate(referenceDimensions = [0,0,0], offsets = [0,0,0])
   hullDimension = [x, y, z];
   
   translate(hadamard(referenceDimensions, offsets/2))translate(hadamard(hullDimension, -offsets/2))cube(hullDimension, center = true);
-} //Convinient notation for hulling a cube by face/edge/point
+} 
 
 //Convinient cube transferomation and hulling 
 module modulate(referenceDimension = [0,0,0], referenceSide = [0,0,0], objectDimension = [0,0,0], objectSide = [0,0,0], Hull = false, hullSide = [0,0,0]){
@@ -415,7 +413,8 @@ module BuildColumn(plateThickness, offsets, sides =TOP, col=0){
   }
 }
 
-module BuildWebs(plateThickness, webWidth, offsets, sides =TOP, col=0)//hull between plates
+//called to generate hull between columns, rather than surface hull, offsetted cube is used to create thicker support
+module BuildWebs(plateThickness, webWidth, offsets, sides =TOP, col=0)
 {
   refDim   = PlateDimension +[0,0,offsets];
   buildDim = [webWidth, PlateDimension[1], plateThickness];
@@ -473,19 +472,36 @@ module BuildWebs(plateThickness, webWidth, offsets, sides =TOP, col=0)//hull bet
   }
 }
 
+//build surfaces used to cut top surface of plates and web. 
+// !TODO utilize Hull rather than innerWebDim.incorrect behavior at C0
 module BuildInnerWebs(col, sides = RIGHT)
 {
   innnerWebDim = [HullThickness,PlateDimension[1],HullThickness];
-  
+  refDim       = PlateDimension;
   hull()
   {
     for(row = [R0:RMAX]) 
     {
-      BuildRmCn(row, col)modulate(PlateDimension,[sides,sign(Clipped[row][col]),TOP], innnerWebDim-[0,abs(Clipped[row][col]),0], [-sides,-sign(Clipped[row][col]),TOP]);
+      if (ClippedOrientation[row][col] == true){ //for length-wise Clip
+        BuildRmCn(row, col)modulate(refDim,[sides,sign(Clipped[row][col]),TOP], innnerWebDim-[0,abs(Clipped[row][col]),0], [-sides,-sign(Clipped[row][col]),TOP]);
+      }
+      else { 
+        BuildRmCn(row, col)modulate(refDim-[abs(Clipped[row][col]),0,0],[sides,sign(Clipped[row][col]),TOP], innnerWebDim, [-sides, -sign(Clipped[row][col]),TOP]);
+      }
     }
     
-    BuildRmCn(R0, col)modulate(PlateDimension,[sides,BACK,TOP], innnerWebDim, [-sides,0,TOP]);
-    BuildRmCn(R3, col)modulate(PlateDimension,[sides,FRONT,TOP], innnerWebDim, [-sides,0,TOP]);
+    if (ClippedOrientation[R0][col] == true){
+      BuildRmCn(R0, col)modulate(refDim,[sides,BACK,TOP], innnerWebDim-[0,abs(Clipped[R0][col]),0], [-sides,0,TOP]);
+    }
+    else {
+      BuildRmCn(R0, col)modulate(refDim-[abs(Clipped[R0][col]),0,0],[sides,BACK,TOP], innnerWebDim, [-sides,0,TOP]);
+    }
+    if (ClippedOrientation[R3][col] == true){
+      BuildRmCn(R3, col)modulate(refDim,[sides,FRONT,TOP], innnerWebDim-[0,abs(Clipped[R3][col]),0], [-sides,0,TOP]);
+    }
+    else {
+      BuildRmCn(R3, col)modulate(refDim-[abs(Clipped[R3][col]),0,0],[sides,FRONT,TOP], innnerWebDim, [-sides,0,TOP]);
+    }
   }
 }
 
@@ -873,10 +889,10 @@ module ShiftTrans() {translate([0,0,0])rotate([45,0,0])children();}
 
 BaseTrans()difference(){
   union(){
-    ShiftTrans()BuildTopPlate(keyhole = false, Mount = false, channel = false, platethickness = 3);
+    ShiftTrans()BuildTopPlate(keyhole = true, Mount = false, channel = false, platethickness = 3);
     BuildThumbCluster(keyhole = false, track = false, Mount = true, Rotary = true, cliplength =4);
   }
-//  for(cols = [CStart:CEnd]){ ShiftTrans()BuildPCB(1.6, 3.8, BOTTOM, cols);}//PCB
+//  for(cols = [CStart:CEnd]){ #ShiftTrans()BuildPCB(1.6, 3.8, BOTTOM, cols);}//PCB
 //  BuildPCBThumb(1.6, 3.8, BOTTOM);
 //  #ShiftTrans()BuildPCBInter(3, 3.8, BOTTOM, 1);
 //  #ShiftTrans()BuildPCBInter(3, 3.8, BOTTOM, 2);
@@ -884,7 +900,7 @@ BaseTrans()difference(){
 
 for(cols = [C2:C5]){
   BaseTrans()ShiftTrans(){
-    BuildRmCn(RMAX,cols)PlaceOnFlick(Angle = -ThetaFlick , offsets = -1)Switch(clipLength = 4);
+//    BuildRmCn(RMAX,cols)PlaceOnFlick(Angle = -ThetaFlick , offsets = -1)Switch(clipLength = 4);
     difference(){
       BuildFlick(PlateDimension[2]+3, 0, TOP, cols);
       BuildRmCn(RMAX, cols)PlaceOnFlick(Angle = -ThetaFlick , offsets = -1)Keyhole(clipLength = Clipped[RMAX][cols]);
@@ -911,18 +927,18 @@ module BuildSet2()
     {
       BuildRmCn(rows, cols)
       if(ClippedOrientation[rows][cols] == true){Switch(colors = "Steelblue", clipLength = Clipped[rows][cols]);}
-      else {rotate([0,0,-90])Switch(colors = "Steelblue", clipLength = Clipped[rows][cols]);}
+      else {rotate([0,0,-90])Switch(colors = "Steelblue", clipLength = Clipped[rows][cols]-1);}
         
     }
   }
 }
 
-BaseTrans()ShiftTrans()BuildSet2();
-BaseTrans()for(i = [1])PlaceOnThumb(Rn = i)Switch([1,1,1],"Steelblue",clipLength = 4);
+//BaseTrans()ShiftTrans()BuildSet2();
+//BaseTrans()for(i = [1])PlaceOnThumb(Rn = i)Switch([1,1,1],"Steelblue",clipLength = 4);
 //BaseTrans()for(i = [7])PlaceOnThumb(Rn = i)RotaryEncoder(stemLength= 7, Wheel = 20);
 //BaseTrans()for(i = [2])PlaceOnThumb(Rn = i)Switch([1,1.5,1],"silver");
-BaseTrans()for(i = [5])PlaceOnThumb(Rn = i)Switch([1,1,1],"cyan" );
-BaseTrans()for(i = [3])PlaceOnThumb(Rn = i)Switch([1,1,1],"blue");
+//BaseTrans()for(i = [5])PlaceOnThumb(Rn = i)Switch([1,1,1],"cyan" );
+//BaseTrans()for(i = [3])PlaceOnThumb(Rn = i)Switch([1,1,1],"blue");
 //BaseTrans()for(i = [6])PlaceOnThumb(Rn = i)Switch([1,1,1],"red");
 //BaseTrans(){
 //BuildRmCn(R0, C3)rotate([120,0,0])translate([1,-11,12])Switch();
