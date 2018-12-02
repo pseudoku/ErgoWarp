@@ -6,7 +6,7 @@ bottom_size = plate_size - 2;
 
 top_height = 11.6;
 
-switch_height = 3.6;
+switch_height = 3.0;
 switch_thick = 1;
 switch_width = 5;
 switch_length = 3;
