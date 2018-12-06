@@ -22,6 +22,7 @@ stem_offset = 0;   // stem offset in units NOT MM. for stepped caps lock
 
 /* [Hidden] */
 $fn = 32;          //change to round things better
+resfactor = 8;   //fn division factor to reduce load
 unit = 19.05;      //beginning to use unit instead of baked in 19.05
 minkowski_radius = 1.75; //minkowski radius. radius of sphere used in minkowski sum for minkowski_key function. 1.75 default for faux G20
 
@@ -43,20 +44,52 @@ minkowski_radius = 1.75; //minkowski radius. radius of sphere used in minkowski 
 
 key_profiles = [
 // BotWid     BotLen  TopWidD TopLenD totDep  TopTilt TopSkew | DishType DishDep  DishSkewX DishSkewY DishInv
-  [18.16,     18.16,  6,      4,      11.5,   -6,     1.75,     0,       1,       0,        0,        false],//DCS ROW 5
-	[18.16,     18.16,  6,      4,      8.5,    -1,     1.75,     0,       1,       0,        0,        false],//DCS ROW 1
-	[18.16,     18.16,  6.2,    4,      7.5,	  3,      1.75,     0,       1,       0,        0,        false],//DCS ROW 2
-	[18.16,     18.16,  6,      4,      6.2,    7,      1.75,     0,       1,       0,        0,        false],//DCS ROW 3
-	[18.16,     18.16,  6,      4,      6.2,	  16,     1.75,     0,       1,       0,        0,        false],//DCS ROW 4
-	[18.4,      18.4,   5.7,    5.7,    7.4,    0,      0,        1,       1.2,     0,        0,        false],//DSA ROW 3
-	[18.4,      18.4,   5.7,    5.7,    13.73,  0,      -14,      1,       1.2,     0,        0,        false],//SA ROW 1
-	[18.4,      18.4,   5.7,    5.7,    11.73,  -7,     0,        1,       1.2,     0,        0,        false],//SA ROW 2
-	[18.4,      18.4,   5.7,    5.7,    11.73,  0,      0,        1,       1.2,     0,        0,        false],//SA ROW 3
-	[18.4,      18.4,   5.7,    5.7,    11.73,  7,      0,        1,       1.2,     0,        0,        false],//SA ROW 4
-	[18.16,     18.16,  6,      4,      6.2,    16,     1.75,     2,       1,       0,        0,        false],//SPACEBAR
-	[18.16,     18.16,  2, 	    2,      6,	    2.5,    0.75,     3,       0,       0,        0,        false],//G20 AKA DCS Row 2 with no dish
+  [18.16,     18.16,  2, 	    2,      6,	    2.5,    0.75,     3,       0,       0,        0,        false],//C0R0 clipped G20 like 
+	[18.16,     18.16,  6,      4,      8.5,    -1,     1.75,     0,       1,       0,        0,        false],//C0R1 unusede 
+	[18.16,     18.16,  6.2,    4,      7.5,	  3,      1.75,     0,       1,       0,        0,        false],//C0R2 unused 
+  
+	[18.16,     18.16,  5.7,    4,      7.4,    -2,     -1.5,     1,       1.2,     0,        0,        false],//C1R0 clipped G20 like
+	[18.16,     18.16,  5.7,    5.7,    7.4,    0,      0,        1,       1.2,     0,        0,        false],//C1R1 clipped G20 DSA 
+  [18.16,     18.16,  5.7,    4,      7.4,    -5,      1.5,     1,       1.2,     0,        0,        false],//C1R2 clipped G20 like
+  
+	[18.4,      18.4,   3,      5.7,    7.4,    0,      0,        1,       2,       -3,        -2,        false],//C2R0 clipped tilted
+	[18.4,      18.4,   3,      5.7,    7.4,    0,      0,        1,       2,       -3,        0,        false],//C2R1 clipped tilted
+	[18.4,      18.4,   3,      5.7,    7.4,    -5,     1.5,      1,       2,       -3,        0,        false],//C2R2 clipped tilted
+  
+	[18.4,      18.4,   5.7,    5.7,    7.4,    -5,      -1,       1,      1.2,     0,        0,       false],//C3R0
+	[18.4,      18.4,   5.7,    5.7,    7.4,    0,      0,        1,       1.2,     0,        0,        false],//C3R1 Norm DSA
+	[18.16,     18.16,  5.7,    4,      7.5,    -5,     1.5,      0,       1,       0,        0,        false],//C3R2
+  
+  [18.4,      18.4,   5.7,    5.7,    7.4,    -5,      0,        1,       1.2,     0,        0,        false],//C4R0
+	[18.4,      18.4,   5.7,    5.7,    7.4,    0,      0,        1,       1.2,     0,        0,        false],//C4R1
+	[18.16,     18.16,  5.7,    3,      7.5,	  -5,     1.5,      0,       1,       0,        0,        false],//C4R2
+  
+	[18.16,     18.16,  5.7,    4,      6.2,    7,      1.75,     0,       1,       0,        0,        false],//C5R0
+	[18.4,      18.4,   5.7,    5.7,    7.4,    0,      0,        1,       1.2,     0,        0,        false],//C5R1
+  [18.16,     18.16,  5.7,    3,      7.5,	   -5,     1.5,      0,       1,       0,        0,        false],//C5R2
+  
+	[18.16,     18.16,  4,      6,      7.4,      6,     -1.5,      1,     1.2,     0,        0,       false],//C6R0
+	[18.16,     18.16,  4,      5.7,    7.4,      0,      0,        1,     .5,      0,        0,       false],//C6R1  true
+	[18.16,     18.16,  4,      3,      7.5,	   -4,      1.5,      1,     1,       1,        -1,        false] //C6R2 
 ];
-
+test = 20;
+mirror([1,0,0])keycap(test, clipOrientation = false, clipLen = -4);
+/*
+references
+// BotWid     BotLen  TopWidD TopLenD totDep  TopTilt TopSkew | DishType DishDep  DishSkewX DishSkewY
+  [18.16,     18.16,  6,      4,      11.5,   -6,     1.75,     0,       1,       0,        0],//DCS ROW 5
+	[18.16,     18.16,  6,      4,      8.5,    -1,     1.75,     0,       1,       0,        0],//DCS ROW 1
+	[18.16,     18.16,  6.2,    4,      7.5,	  3,      1.75,     0,       1,       0,        0],//DCS ROW 2
+	[18.16,     18.16,  6,      4,      6.2,    7,      1.75,     0,       1,       0,        0],//DCS ROW 3
+	[18.16,     18.16,  6,      4,      6.2,	  16,     1.75,     0,       1,       0,        0],//DCS ROW 4
+	[18.4,      18.4,   5.7,    5.7,    7.4,    0,      0,        1,       1.2,     0,        0],//DSA ROW 3
+	[18.4,      18.4,   5.7,    5.7,    13.73,  0,      -14,      1,       1.2,     0,        0],//SA ROW 1
+	[18.4,      18.4,   5.7,    5.7,    11.73,  -7,     0,        1,       1.2,     0,        0],//SA ROW 2
+	[18.4,      18.4,   5.7,    5.7,    11.73,  0,      0,        1,       1.2,     0,        0],//SA ROW 3
+	[18.4,      18.4,   5.7,    5.7,    11.73,  7,      0,        1,       1.2,     0,        0],//SA ROW 4
+	[18.16,     18.16,  6,      4,      6.2,    16,     1.75,     2,       1,       0,        0],//DCS ROW 4 SPACEBAR
+	[18.16,     18.16,  2, 	    2,      6,	    2.5,    0.75,     3,       0,       0,        0],//G20 AKA DCS Row 2 with no dish
+*/
 
 function capDim(capIDs, dimIDs) = key_profiles[capIDs][dimIDs];
 echo(capDim(5, bottom_key_width));
@@ -106,8 +139,8 @@ module cherry_stem(){
 	difference(){
     union(){
       if (stem_profile != 2){
-        translate([-(cross_length+extra_outer_cross_width)/2, -(cross_length+extra_outer_cross_height)/2, stem_inset])
-    			cube([cross_length+extra_outer_cross_width, cross_length+extra_outer_cross_height, 15]);
+        translate([0,0,7.5])
+    			rotate([0,0,90])cube([cross_length+extra_outer_cross_width, cross_length+extra_outer_cross_height, 15], center = true);
       }
       else {
         cylinder(d = cross_length+extra_outer_cross_height, h = 15);
@@ -115,7 +148,7 @@ module cherry_stem(){
 			if (has_brim == 1){ cylinder(r=brim_radius,h=brim_depth); }
 		}
 		//the cross part of the steam
-		translate([0,0,(cross_depth)/2 + stem_inset]){
+		translate([0,0,(cross_depth)/2 + stem_inset])rotate([0,0,90]){
 	        cube([vertical_cross_width,cross_length+extra_vertical_cross_length,cross_depth], center=true );
 	        cube([cross_length,horizontal_cross_width,cross_depth], center=true );
 	  }
@@ -169,18 +202,18 @@ module shape(capID, thickness_difference = 0 , depth_difference= 0){
 module outside(capID, thickness_difference){
 	difference(){
 		cube([100000,100000,100000],center = true);
-		shape_hull(capID, thickness_difference, 0);
+		shape_hull(capID, thickness_difference, 0, 2);
 	}
 }
 
 // super basic hull shape without dish
-module shape_hull(capID, thickness_difference, depth_difference){
+module shape_hull(capID, thickness_difference, depth_difference, modifier = 1){
 	hull(){
-		roundedRect([total_key_height(capID) - thickness_difference, total_key_height(capID) - thickness_difference, .001],1.5);  //Base Plate 
+		roundedRect([total_key_width(capID) - thickness_difference, total_key_height(capID) - thickness_difference, .001],1.5);  //Base Plate 
 
-		translate([0,capDim(capID,top_skew),capDim(capID,total_depth) - depth_difference])
+		translate([0,capDim(capID,top_skew),capDim(capID,total_depth) * modifier- depth_difference])
       rotate([-capDim(capID,top_tilt),0,0])
-        roundedRect([total_key_height(capID) - thickness_difference - capDim(capID,width_difference), total_key_height(capID) - thickness_difference - capDim(capID,height_difference), .001],1.5); //Top Plate
+        roundedRect([total_key_height(capID) - thickness_difference - capDim(capID,width_difference) * modifier, total_key_height(capID) - thickness_difference - capDim(capID,height_difference) * modifier, .001],1.5); //Top Plate
 	}
 }
 
@@ -204,13 +237,13 @@ module cylindrical_dish(capID, depth_difference){
 		translate([capDim(capID,dish_skew_x), capDim(capID,top_skew) + capDim(capID,dish_skew_y), capDim(capID,total_depth) - depth_difference])
 		rotate([90-capDim(capID,top_tilt),0,0])
 		translate([0,-chord_length,0])
-		cylinder(h=100,r=rad, $fn=1024, center=true);
+		cylinder(h=100,r=rad, $fn=1024/resfactor, center=true);
 	}
 	else{
 		translate([capDim(capID,dish_skew_x), capDim(capID, top_skew) + capDim(capID, dish_skew_y), capDim(capID, total_depth) - depth_difference])
 		rotate([90-capDim(capID,top_tilt),0,0])
 		translate([0,chord_length,0])
-		cylinder(h=100,r=rad, $fn=1024, center=true);
+		cylinder(h=100,r=rad, $fn=1024/resfactor, center=true);
 	}
 }
 
@@ -232,13 +265,13 @@ module spherical_dish(capID, depth_difference){
 		rotate([-capDim(capID,top_tilt),0,0])
 		translate([0,0,-chord_length])
 		//NOTE: if your dish is long at all you might need to increase this number
-		sphere(r=rad, $fn=512);
+		sphere(r=rad, $fn=512/resfactor);
 	}
 	else{
 		translate([capDim(capID,dish_skew_x), capDim(capID,top_skew) + capDim(capID,dish_skew_y), capDim(capID,total_depth) - depth_difference])
 		rotate([-capDim(capID,top_tilt),0,0])
 		translate([0,0,chord_length])
-		sphere(r=rad, $fn=256);
+		sphere(r=rad, $fn=256/resfactor);
 	}
 }
 
@@ -250,30 +283,45 @@ module sideways_cylindrical_dish(capID, depth_difference){
 		translate([capDim(capID,dish_skew_x), capDim(capID,top_skew) + capDim(capID,dish_skew_y), capDim(capID,total_depth) - depth_difference])
 		rotate([90,capDim(capID,top_tilt),90])
 		translate([0,-chord_length,0])
-		cylinder(h=total_key_height(capID) + 20,r=rad, $fn=1024, center=true); // +20 just cuz
+		cylinder(h=total_key_height(capID) + 20,r=rad, $fn=1024/resfactor, center=true); // +20 just cuz
 	}
 	else{
 		translate([capDim(capID,dish_skew_x), capDim(capID,top_skew) + capDim(capID,dish_skew_y), capDim(capID,total_depth) - depth_difference])
 		rotate([90,capDim(capID,top_tilt),90])
 		translate([0,chord_length,0])
-		cylinder(h=total_key_height(capID) + 20,r=rad, $fn=1024, center=true);
+		cylinder(h=total_key_height(capID) + 20,r=rad, $fn=1024/resfactor, center=true);
 	}
 }
 
-module keycap(capID = 0, clipOrientation = true){
-		difference(){
-			shape(capID);
-			#shape(capID, wall_thickness, keytop_thickness);
+module keycap(capID = 0, clipOrientation = true, clipLen = 0){
+  difference(){ 
+    shape(capID);
+    shape(capID, wall_thickness, keytop_thickness);
+    if(clipLen != 0) {
+      if (clipOrientation == false) {
+        translate([-sign(clipLen)*total_key_width(capID)/2 - clipLen,0,0])
+        cube([total_key_width(capID) , total_key_height(capID), 30], center=true);}
+      else {
+        translate([0,-sign(clipLen)*total_key_height(capID)/2 - clipLen,0])
+        cube([total_key_width(capID), total_key_height(capID), 30], center=true);}
 		}
-    difference(){
-      connector(has_brim);
-      if (capDim(capID, inverted_dish) == false)dish(capID,0);
-      else {} 
-    }
- }
-
+  }//Body
+  difference(){
+    connector(has_brim);
+    if (capDim(capID, inverted_dish) == false)dish(capID,0);
+    else {} 
+  }//Stem
+}
 // ACTUAL OUTPUT
 //difference(){
- keycap(5);
+module fullset(){
+ for (i = [1:6]){
+   for (j= [0:2]){
+     translate([20*i, 20*j, 0])keycap(i*3+j, clipOrientation = false, clipLen = 0);
+   }   
+ }
+}
+
+fullset();
 //	// preview cube, for seeing inside the keycap
-//	//cube([100,100,100]);
+//cube([100,100,100]);

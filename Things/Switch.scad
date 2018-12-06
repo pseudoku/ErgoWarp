@@ -40,9 +40,9 @@ module Switch(switchScale= [1,1,1], colors = "teal", clipLength = 0)
           translate([-plate_size/4, -plate_size/6, top_height])cube([plate_size/2, plate_size/3, 0.25]);
         }
 
-        scale(switchScale)color(colors){
-          translate([0,0,cap_heightShift-2])rotate([0,0,45])cylinder(d1 = cap_width*sqrt(2),d2 = (plate_size -4)*sqrt(2), 7.5, $fn=4, center = true);
-        }
+//        scale(switchScale)color(colors){
+//          translate([0,0,cap_heightShift-2])rotate([0,0,45])cylinder(d1 = cap_width*sqrt(2),d2 = (plate_size -4)*sqrt(2), 7.5, $fn=4, center = true);
+//        }
         bottom_height = 4.5;
         bottom_chamfer_width = 3.05;
         bottom_chamfer_height =  1;

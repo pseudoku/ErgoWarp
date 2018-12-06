@@ -64,90 +64,91 @@ FingerLength = [ //proxial, intermediate, distal carpal length in mm
                 [19.4,  0,  0], //pinky
                 [19.4,  0,  0], //pinky
                 [  52, 35, 25]  //thumb
-                ];
-
-//-------  design and adjustment parameters 
-//Angles to the pathfunction  
-//               i1   i2   i3    m     r    p1   p2
-ThetaR0      = [ 90,  90,  90,  90,   90,   90,  90]; // set Row 0 Angle for path function input
-ThetaR2      = [ 59,  59,  65,  66, 60.5,   61,  50]; // set Row 2 Angle for path function input
-Phi2Shift    = [  0,   0, 180, 180,    0,    0,   0]; // ad hoc solution when solver return phase shifted when theta R2 > 62
-
-ThetaR1Shift = [ -1,  -1,  -1,   0, -1.5, -3.5,  -2];  // set adjustment angle calculated R1 Angle
-ThetaR3Shift = [-12, -10, -11, -10,  -10,  -18, -24];  // set adjustment angle calculated R3 Angle
-ThetaR4Shift = [  0,   0,   0,   0,    0,    0,   0];  // set adjustment angle calculated R4 Angle
-
-ThetaRoll    = [ 20,  20,   0,   9,   12,   7,  -20];  // column rolling angle for the keysz
-
-ThetaKnock   =[[  0,   0,   0,  -5,    0,   0,   0],  //Manual Adjustment of Pitches post Calculation for minor adjustment
-               [  0,   0,   0,   0,    0,   0,   0],  //R1s
-               [  0, -10, -10,   0,  -10,   5,   2],  //R2s   right p1&2 = 5  left p1&2 = 10 
-               [  0,   0,  -5,   0,  -10,   5,   5],  //R3
-               [  0,   0,   0,   0,    0,   0,   0]   //R4
                ];
 
-KeycapOffset = [  0,   0,   0,   0,    5,   2,   2]; // adjust path radius 
-Pathlist     = [  0,   0,   0,   1,    2,   3,   3]; // Path function to apply on column
-               
-Clipped      =[[  4,   4,  -4,   0,    0,   0,  -4],  //R0
-               [  4,   4,  -4,   0,    0,  -4,  -4],  //R1s
-               [  0,   4,  -4,   0,    0,   0,  -4],  //R2s 
-               [  4,   4,  -4,   4,    4,   4,  -4],  //R3
-               [  4,   4,   4,   4,    4,   4,  -4]   //R4
-              ]; //Manual Adjustment of Pitches post Calculation for minor adjustment
-               
+//structure to hold column origin transformation
+ColumnOrigin = [//[translation vec] [rotation vec1] [rotation vec2]
+                [[  -55,  37,   6], [0,    0,   0], [ 0, 90,  0]], //INDEX 1 knuckle
+                [[  -32,  35,   6], [0,    0,   0], [ 0, 90,  0]], //INDEX 2 knuckle
+                [[  -18,  36,   6], [0,    0,   0], [ 0, 90,  0]], //INDEX 3 knuckle
+                [[    0,  36,   0], [0,    0,   0], [ 0, 90,  0]], //MIDDLE knuckle
+                [[   20,  37,  -7], [0,    0, -10], [ 0, 90,  0]], //RING knuckle
+                [[ 43.5,  24,  -5], [0,    0, -42], [ 0, 90,  7]], //PINKY 1 knuckle
+                [[ 57.5,10.5,-7.5], [0,    0, -43], [ 0, 90,  7]], //PINKY 2 knuckle
+                [[   48, -63,  25], [10, -27,  15], [90,  0, -3]]  //Thumb wrist root
+               ];
+
+// structure to pass to thumbplacement module
+ThumbPosition = 
+ [//[[thetaDist, thetaMed, thetaProx, phiProx][rotation angle][rotation angle2][translation vec]]
+    [[15, 30, 35, 0], [ 0,  80, 0], [90, 0,   0], [   -6,   -20, -PlateHeight-51  ]], //T0 quantary palm
+    [[15, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [  -13 ,  -5.5, -PlateHeight-13 ]], //*T1 Secondary tip low prof
+    [[15, 30, 35, 0], [ 0,  20, 0], [90, 0,   0], [  -19,   -20, -PlateHeight-36  ]], //T2 Tertiary palm
+    [[ 0, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [-13.5, -19.5, -PlateHeight-13  ]], //*T3 Secondary  butt Clipped
+//  [[ 0, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [-13.5, -23.5, -PlateHeight-13  ]], //T3 Secondary  butt Normal
+    [[ 0, 30, 35, 0], [ 0,  20, 0], [ 0, 0,   0], [  -18,   -31, -PlateHeight-25  ]], //T4 Was Primary ext
+    [[15, 30, 35, 0], [ 0,  80, 0], [ 0, 0,   0], [   -5, -11.5, -PlateHeight-39.5]], //*T5 quantary tip
+    [[15, 30, 35, 0], [ 0,  20, 0], [ 0, 0,   0], [  -19, -11.5, -PlateHeight-26  ]], //*T6 Tertiary tip
+    [[15, 30, 35, 0], [ 0,  80, 0], [ 0, 0,   0], [   -6,    10, -PlateHeight-41  ]], //T7 RotarySwitch test placement 1
+    [[15, 30, 35, 0], [ 0,  20, 0], [ 0, 90,  0], [  -31, -30.5, -PlateHeight-22  ]], //T7 RotarySwitch test placement 2
+    [[15, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [  -13,  -5.5, -PlateHeight-13  ]], //T2 Tertiary palm when clipped T1
+    [[15, 30, 35, 0], [ 0,  50, 0], [ 0, 0,   0], [  -15, -11.5, -PlateHeight-25  ]], //mount 
+  ];
+         
+//-------  design and adjustment parameters 
+//Angles used in the pathfunction  
+//               i1   i2   i3    m     r    p1   p2
+ThetaR0      = [ 90,  90,  90,  90,   90,   90,  90]; //set Row 0 Angle for path function input
+ThetaR2      = [ 59,  59,  65,  66, 60.5,   61,  50]; //set Row 2 Angle for path function input
+Phi2Shift    = [  0,   0, 180, 180,    0,    0,   0]; //ad hoc solution when solver return phase shifted
+ThetaR1Shift = [ -1,  -1,  -1,   0, -1.5, -3.5,  -2];  //set adjustment angle calculated R1 Angle
+ThetaR3Shift = [-12, -10, -11, -10,  -10,  -18, -24];  //set adjustment angle calculated R3 Angle
+ThetaR4Shift = [  0,   0,   0,   0,    0,    0,   0];  //set adjustment angle calculated R4 Angle
+ThetaRoll    = [ 20,  20,   0,   9,   12,   7,  -20];  //column rolling angle for the keysz
+
+//Manual Adjustment of Pitches post Calculation for minor adjustment
+ThetaKnock   =[[  0,   0,   0,  -5,    0,   0,    0],  //R0s 
+               [  0,   0,   0,   0,    0,   0,    0],  //R1s
+               [  0, -10, -10,   0,  -10,   5,    2],  //R2s   right p1&2 = 5  left p1&2 = 10 
+               [  0,   0,  -5,   0,  -10,   5,    5],  //R3
+               [  0,   0,   0,   0,    0,   0,    0]   //R4
+               ];
+
+KeycapOffset = [  0,   0,   0,   0,    5,   2,    2]; //adjust path radius 
+Pathlist     = [  0,   0,   0,   1,    2,   3,    3]; //Path function to apply on column
+
+//Manual Adjustment of Pitches post Calculation for minor adjustment               
+Clipped      =[[  4,   4,  -4,   0,    0,   0,   -4],  //R0
+               [  4,   4,  -4,   0,    0,  -4,   -4],  //R1s
+               [  0,   4,  -4,   0,    0,   0,   -4],  //R2s 
+               [  4,   4,  -4,   4,    4,   4,   -4],  //R3
+               [  4,   4,   4,   4,    4,   4,   -4]   //R4
+              ];
+
+//Orientation of the clippede switches
+
 ClippedOrientation = //if lengt-wise true 
               [[false, false, false, true, true, true, false],  
                [false, false, false, true, true, true, false],
                [false, false, false, true, true, true, false],
                [false, false, false, true, true, true, false],
                [false, false, false, true, true, true, false]
-               ]; //Orientation of the clippede switches
+               ]; 
                
-
-
 //              R0,  R1,  R2,  R3,  R4
 ThetaOffset  = [90,   0,   0,   0,  90]; // initial switch pitch angle 
 PathSideRm   = [IN, OUT, OUT, OUT, OUT]; // switch placement Path 
 
+//structure to hold height of keyswitches relative to the path functions 
+//R0 is set at switch bottom while the rest is neutral  
+
+KeyOriginCnRm = [for( i= [C0:C6])[[0,BottomHeight+KeycapOffset[i],0], for(j = [R1:R4])[0,TopHeight+KeycapOffset[i],0]]];
 //row and column loop setter
 RMAX         = R2;  // Set max rows on columns
 CStart       = C1;  // Set column to begin looping for the build
 CEnd         = C6;  // Set column to end for the build
 ThetaFlick   = 85;   
-
-//structure to hold column origin transformation
-ColumnOrigin = [//[transition vec]  [rotation vec1] [rotation vec2]
-                [[  -55,  37,   6], [0,    0,   0], [ 0, 90,  0]], //INDEX 1 knuckle
-                [[  -32,  35,   4], [0,    0,   0], [ 0, 90,  0]], //INDEX 2 knuckle
-                [[  -18,  36,   4], [0,    0,   0], [ 0, 90,  0]], //INDEX 3 knuckle
-                [[    0,  36,   0], [0,    0,   0], [ 0, 90,  0]], //MIDDLE knuckle
-                [[   20,  37,  -7], [0,    0, -10], [ 0, 90,  0]], //RING knuckle
-                [[ 43.5,  24,  -5], [0,    0, -42], [ 0, 90,  7]], //PINKY 1 knuckle
-                [[ 57.5,10.5,-7.5], [0,    0, -43], [ 0, 90,  7]], //PINKY 2 knuckle
-                [[   48, -63,  30], [10, -27,  15], [90,  0, -3]]  //Thumb wrist root
-               ];
-
-//structure to hold height of keyswitches relative to the path functions R0 is set at switch bottom while the rest is neutral         
-KeyOriginCnRm = [for( i= [C0:C6])[[0,BottomHeight+KeycapOffset[i],0], for(j = [R1:R4])[0,TopHeight+KeycapOffset[i],0]]];
-
-// structure to pass to thumbplacement module
-ThumbPosition = 
- [//[[thetaDist, thetaMed, thetaProx, phiProx][rotation angle][rotation angle2][translation vec]]
-    [[15, 30, 35, 0], [ 0,  80, 0], [90, 0,   0], [   -6,   -20, -PlateHeight-51  ]], //T0 quantary palm
-    [[15, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [  -13 ,  -5.5, -PlateHeight-13  ]], //T1 Secondary tip low prof
-    [[15, 30, 35, 0], [ 0,  20, 0], [90, 0,   0], [  -19,   -20, -PlateHeight-36  ]], //T2 Tertiary palm
-    [[ 0, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [-13.5, -19.5, -PlateHeight-13  ]], //T3 Secondary  butt Clipped
-//  [[ 0, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [-13.5, -23.5, -PlateHeight-13  ]], //T3 Secondary  butt Normal
-    [[ 0, 30, 35, 0], [ 0,  20, 0], [ 0, 0,   0], [  -18,   -31, -PlateHeight-25  ]], //T4 Was Primary ext
-    [[15, 30, 35, 0], [ 0,  80, 0], [ 0, 0,   0], [   -6, -11.5, -PlateHeight-39.5]], //T5 quantary tip
-    [[15, 30, 35, 0], [ 0,  20, 0], [ 0, 0,   0], [  -19, -11.5, -PlateHeight-25  ]], //T6 Tertiary tip
-    [[15, 30, 35, 0], [ 0,  80, 0], [ 0, 0,   0], [   -6,    10, -PlateHeight-41  ]], //T7 RotarySwitch test placement 1
-    [[15, 30, 35, 0], [ 0,  20, 0], [ 0, 90,  0], [  -31, -30.5, -PlateHeight-22  ]], //T7 RotarySwitch test placement 2
-    [[15, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [  -13,  -5.5, -PlateHeight-13  ]], //T2 Tertiary palm when clipped T1
-    [[15, 30, 35, 0], [ 0,  50, 0], [ 0, 0,   0], [  -15, -11.5, -PlateHeight-25  ]], //mount 
-  ];
-           
+  
 //------ SOLVER  FUNCTIONS
   //structure to hold path functions deceimal points are obnoxious I know.... not efficient either but will do
   function PathStruct(theta) = //PathStruct(theta)[column][path][side] 
@@ -283,10 +284,9 @@ module hullPlate(referenceDimensions = [0,0,0], offsets = [0,0,0])
 module modulate(referenceDimension = [0,0,0], referenceSide = [0,0,0], objectDimension = [0,0,0], objectSide = [0,0,0], Hull = false, hullSide = [0,0,0]){
   if(Hull == false){
     translate(hadamard(referenceDimension, referenceSide/2))translate(hadamard(objectDimension,objectSide / 2))cube(objectDimension, center = true);
-  }
-  else{
+  }else{
     color("red")translate(hadamard(referenceDimension, referenceSide/2))translate(hadamard(objectDimension, objectSide/2))hullPlate(objectDimension, hullSide);
-    }
+  }
 }  
 
 module PlaceColumnOrigin(Cn = C0) {
@@ -399,8 +399,7 @@ module BuildColumn(plateThickness, offsets, sides =TOP, col=0){
           BuildRmCn(row+1, col)modPlateLen(Hulls = true, hullSides = [0,BACK,0], rows = row+1, cols = col);
         }
       }
-    }
-    else { // for Width-wise Clip
+    }else { // for Width-wise Clip
       BuildRmCn(row, col)modPlateWid(Hulls = false, rows =row, cols = col);  
       if (row < RMAX){//Support struct
         hull(){
@@ -423,15 +422,13 @@ module BuildWebs(plateThickness, webWidth, offsets, sides =TOP, col=0)
       //Hull Face 1
       if (ClippedOrientation[row][col] == true){ //for length-wise Clip
         BuildRmCn(row, col)modulate(refDim,[RIGHT,sign(Clipped[row][col]),sides], buildDim-[0,abs(Clipped[row][col]),0], [LEFT,-sign(Clipped[row][col]),BOTTOM]);
-      }
-      else{
+      }else {
         BuildRmCn(row, col)translate([max(Clipped[row][col]/2,0),0,0])modulate(refDim,[RIGHT,sign(Clipped[row][col]),sides], buildDim, [LEFT,-sign(Clipped[row][col]),BOTTOM]);
       }
       //Hull Face 2
       if (ClippedOrientation[row][col+1] == true){ //for length-wise Clip
         BuildRmCn(row, col+1)modulate(refDim,[LEFT,sign(Clipped[row][col+1]),sides], buildDim-[0,abs(Clipped[row][col+1]),0], [RIGHT,-sign(Clipped[row][col+1]),BOTTOM]);
-      }
-      else {
+      }else {
         BuildRmCn(row, col+1)translate([min(-abs(Clipped[row][col+1])/2,0),0,0])modulate(refDim,[LEFT,sign(Clipped[row][col+1]),sides], buildDim, [RIGHT,-sign(Clipped[row][col+1]),BOTTOM]);
       }
     }
@@ -441,29 +438,25 @@ module BuildWebs(plateThickness, webWidth, offsets, sides =TOP, col=0)
         //vertex 1
         if (ClippedOrientation[row][col] == true){ //for length-wise Clip
           BuildRmCn(row, col)modulate(refDim,[RIGHT,sign(Clipped[row][col]),sides], buildDim-[0,abs(Clipped[row][col]),0], [LEFT,-sign(Clipped[row][col]),BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-        }
-        else {
+        }else {
           BuildRmCn(row, col)translate([max(Clipped[row][col]/2,0),0,0])modulate(refDim,[RIGHT,sign(Clipped[row][col]),sides], buildDim, [LEFT,-sign(Clipped[row][col]),BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
         }
         //vertex 2
         if (ClippedOrientation[row+1][col] == true){ //for length-wise Clip
           BuildRmCn(row+1, col)modulate(refDim,[RIGHT,sign(Clipped[row+1][col]),sides], buildDim-[0,abs(Clipped[row+1][col]),0], [LEFT,-sign(Clipped[row+1][col]),BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-        }
-        else {
+        }else {
           BuildRmCn(row+1, col)translate([max(Clipped[row][col]/2,0),0,0])modulate(refDim,[RIGHT,sign(Clipped[row+1][col]),sides], buildDim, [LEFT,-sign(Clipped[row+1][col]),BOTTOM],Hull = true, hullSide = [0,BACK,0]);
         }
         //vertex 3   
         if (ClippedOrientation[row][col+1] == true){ //for length-wise Clip    
           BuildRmCn(row, col+1)modulate(refDim,[LEFT,sign(Clipped[row][col+1]),sides], buildDim-[0,abs(Clipped[row][col+1]),0], [RIGHT,-sign(Clipped[row][col+1]),BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
-        }
-        else {
+        }else {
           BuildRmCn(row, col+1)translate([min(-abs(Clipped[row][col+1])/2,0),0,0])modulate(refDim,[LEFT,sign(Clipped[row][col+1]),sides], buildDim, [RIGHT,-sign(Clipped[row][col+1]),BOTTOM],Hull = true, hullSide = [0,FRONT,0]);
         }
         //vertex 4       
         if (ClippedOrientation[row+1][col+1] == true){ //for length-wise Clip
           BuildRmCn(row+1, col+1)modulate(refDim,[LEFT,sign(Clipped[row+1][col+1]),sides], buildDim-[0,abs(Clipped[row+1][col+1]),0], [RIGHT,-sign(Clipped[row+1][col+1]),BOTTOM],Hull = true, hullSide = [0,BACK,0]);
-        }
-        else {
+        }else {
           BuildRmCn(row+1, col+1)translate([min(-abs(Clipped[row][col+1])/2,0),0,0])modulate(refDim,[LEFT,sign(Clipped[row+1][col+1]),sides], buildDim, [RIGHT,-sign(Clipped[row+1][col+1]),BOTTOM],Hull = true, hullSide = [0,BACK,0]);
         }
       }
@@ -484,22 +477,19 @@ module BuildInnerWebs(col, sides = RIGHT)
     {
       if (ClippedOrientation[row][col] == true){ //for length-wise Clip
         BuildRmCn(row, col)modulate(refDim,[sides,sign(Clipped[row][col]),TOP], innnerWebDim-[0,abs(Clipped[row][col]),0], [-sides,-sign(Clipped[row][col]),TOP]);
-      }
-      else { 
+      }else { 
         BuildRmCn(row, col)translate(ClipRef(row,col))modulate(refDim,[sides,sign(Clipped[row][col]),TOP], innnerWebDim, [-sides, -sign(Clipped[row][col]),TOP]);
       }
     }
     
     if (ClippedOrientation[R0][col] == true){
       BuildRmCn(R0, col)modulate(refDim,[sides,BACK,TOP], innnerWebDim-[0,abs(Clipped[R0][col]),0], [-sides,0,TOP]);
-    }
-    else {
+    }else {
       BuildRmCn(R0, col)translate(ClipRef(R0,col))modulate(refDim,[sides,BACK,TOP], innnerWebDim, [-sides,0,TOP]);
     }
     if (ClippedOrientation[R3][col] == true){
       BuildRmCn(R3, col)modulate(refDim,[sides,FRONT,TOP], innnerWebDim-[0,abs(Clipped[R3][col]),0], [-sides,0,TOP]);
-    }
-    else {
+    }else {
 //      BuildRmCn(R3, col)translate(ClipRef(R3,col))modulate(refDim,[sides,FRONT,TOP], innnerWebDim, [-sides,0,TOP]);
     }
   }
@@ -519,15 +509,17 @@ module BuildThumbCluster(sides = 0,  offsets = 0, cliplength =0, frameThickness 
     modulate(PlateDimension,[0,0,TOP],plateDim, [0,0,BOTTOM], Hull = Hulls, hullSide = hullSides);
   }
   
+  module modPlateWid(Hulls = true, hullSides = [0,0,0], rows, cols){//shorthand call for Width-wise clipping
+    modulate(refDim,[sign(Clipped[rows][cols]), 0, sides], plateDim-[abs(Clipped[rows][cols]),0,0], [-sign(Clipped[rows][cols]), 0, BOTTOM], Hull = Hulls, hullSide = hullSides);
+  }
+  
   difference(){ //R0~R3 hull 
     union(){
       //upper keyplates
       //track point ver
       if( track == true){
        //past implementation depreciated
-      }
-      //normal version
-      else{
+      }else{//normal version
         for(i = [3,5,6]){PlaceOnThumb(i)modPlate(false);} //main plate
         
         PlaceOnThumb(1)modulate(PlateDimension,[RIGHT,sign(cliplength),TOP], plateDim-[0,abs(cliplength),0], [LEFT,-sign(cliplength),BOTTOM]);
@@ -562,23 +554,23 @@ module BuildThumbCluster(sides = 0,  offsets = 0, cliplength =0, frameThickness 
             PlaceOnThumb(5)modPlate(hullSides = [0,LEFT,0]);
           }
         }
-        //attachement to finger columns TODO refactor into separate module  
+        //attachement to finger columns TODO refactor into separate module?
        if(Mount == true){ 
          hull(){      
             PlaceOnThumb(1)modulate(PlateDimension,[RIGHT,sign(cliplength),TOP], plateDim-[0,abs(cliplength),0], [LEFT,-sign(cliplength),BOTTOM], Hull = true, hullSide = [0,LEFT,0]);
-            ShiftTrans()BuildRmCn(R0, C2)modPlate(hullSides = [0,BACK,0]);
+           ShiftTrans()BuildRmCn(R0, C2)modPlateWid(Hulls = true, hullSides = [0,BACK,0],rows =  R0, cols =C2);
 //          ShiftTrans()BuildRmCn(R0, C1)modPlate(hullSides = [RIGHT,BACK,0]);
           }
           hull(){      
             PlaceOnThumb(1)modulate(PlateDimension,[RIGHT,sign(cliplength),TOP], plateDim-[0,abs(cliplength),0], [LEFT,-sign(cliplength),BOTTOM], Hull = true, hullSide = [RIGHT,LEFT,0]);
             PlaceOnThumb(6)modPlate(hullSides = [LEFT,LEFT,0]);
-            ShiftTrans()BuildRmCn(R0, C2)modPlate(hullSides = [LEFT,BACK,0]);
-            ShiftTrans()BuildRmCn(R0, C1)modPlate(hullSides = [RIGHT,BACK,0]);
+            ShiftTrans()BuildRmCn(R0, C2)modPlateWid(hullSides = [LEFT,BACK,0], rows = R0, cols = C2);
+            ShiftTrans()BuildRmCn(R0, C1)modPlateWid(hullSides = [RIGHT,BACK,0],rows = R0, cols = C1);
           }
           hull(){      
             PlaceOnThumb(6)modPlate(hullSides = [0,LEFT,0]);
-            ShiftTrans()BuildRmCn(R0, C1)modPlate(hullSides = [0,BACK,0]);
-//          ShiftTrans()BuildRmCn(R0, C1)modPlate(hullSides = [RIGHT,BACK,0]);
+            ShiftTrans()BuildRmCn(R0, C1)modPlateWid(hullSides = [0,BACK,0], rows = R0, cols = C1);
+//          ShiftTrans()BuildRmCn(R0, C1)modPlateWid(hullSides = [RIGHT,BACK,0],rows = R0, cols = C1);
           }
           
           if(Rotary == true){
@@ -589,19 +581,19 @@ module BuildThumbCluster(sides = 0,  offsets = 0, cliplength =0, frameThickness 
               ShiftTrans()BuildRmCn(R0, C1)modPlate(hullSides = [LEFT,0,BOTTOM]);
               ShiftTrans()BuildRmCn(R0, C1)modulate(PlateDimension-[0,5,0],[0,0,TOP],plateDim-[0,0,5], [0,0,BOTTOM], Hull = true, hullSide = [LEFT,0,BOTTOM]);
             }
-          } 
-          else{
+          } else{
             hull(){      
               PlaceOnThumb(6)modPlate(hullSides = [RIGHT,LEFT,0]);
               PlaceOnThumb(5)modPlate(hullSides = [LEFT,LEFT,0]);
-              ShiftTrans()BuildRmCn(R0, C1)modPlate(hullSides = [LEFT,0,BOTTOM]);
-              ShiftTrans()BuildRmCn(R0, C1)modulate(PlateDimension-[0,5,0],[0,0,TOP],plateDim-[0,5,5], [0,0,BOTTOM], Hull = true, hullSide = [LEFT,0,BOTTOM]);
+              ShiftTrans()BuildRmCn(R0, C1)modPlate(hullSides = [LEFT,0,0]);
+              //ShiftTrans()BuildRmCn(R0, C1)modulate(PlateDimension-[0,5,0],[0,0,TOP],plateDim-[0,5,5], [0,0,BOTTOM], Hull = true, hullSide = [LEFT,0,BOTTOM]);
             }
             hull(){      
               PlaceOnThumb(5)modPlate(hullSides = [0,LEFT,0]);
-              ShiftTrans()BuildRmCn(R0, C1)modPlate(hullSides = [LEFT,BACK,BOTTOM]);
+              ShiftTrans()BuildRmCn(R0, C1)modPlate(hullSides = [LEFT,0,0]);
             }
           }
+          
           hull(){
             PlaceOnThumb(R1)modPlate(hullSides = [LEFT,LEFT,0]);
             ShiftTrans()BuildRmCn(R0, C3)modPlate(hullSides = [0,BACK,0]);
@@ -638,10 +630,10 @@ module BuildThumbCluster(sides = 0,  offsets = 0, cliplength =0, frameThickness 
             ShiftTrans()BuildRmCn(R0, C6)modPlate(hullSides = [0,BACK,0]);
           }          
           //hopeful trackpoint mount
-          PlaceOnThumb(6)translate([0,12.5,-7.25-.3]){ 
-              translate([19/2,0,1])cylinder(d =5, 8);  //mount 
-              translate([-19/2,0,1])cylinder(d =5, 8); //mount 
-          }
+//          PlaceOnThumb(6)translate([0,12.5,-7.25-.3]){ 
+//              translate([19/2,0,1])cylinder(d =5, 8);  //mount 
+//              translate([-19/2,0,1])cylinder(d =5, 8); //mount 
+//          }
         }      
       }       
     }
@@ -661,10 +653,10 @@ module BuildThumbCluster(sides = 0,  offsets = 0, cliplength =0, frameThickness 
       //additional cuts to clean up press
       PlaceOnThumb(R1)modulate(PlateDimension,[0,0,TOP],plateDim+[1,1,5], [0,0,TOP], Hull = false);
       PlaceOnThumb(R3)modulate(PlateDimension,[0,0,TOP],plateDim+[1,1,5], [0,0,TOP], Hull = false);
-      PlaceOnThumb(6)modulate(PlateDimension,[0,0,TOP],plateDim+[1,10,5], [0,0,TOP], Hull = false);
+      PlaceOnThumb(6)modulate(PlateDimension,[0,0,TOP],plateDim+[1,1,5], [0,0,TOP], Hull = false);
       
       ShiftTrans()BuildRmCn(R0, C1)Keyhole(cutThickness = 4);
-      ShiftTrans()BuildRmCn(R0, C2)Keyhole(cutThickness = 4);  
+      ShiftTrans()BuildRmCn(R0, C2)Keyhole(cutThickness = 3.5);  
       
       // PCB Mounts
 //      #rotate([32,15,20])translate([5,-20,3])cube([35,25,3.5]);
@@ -673,15 +665,14 @@ module BuildThumbCluster(sides = 0,  offsets = 0, cliplength =0, frameThickness 
 //      rotate([40,-10,20])translate([15,15,-8.5])cylinder(d= 3, 6);
 //      
       //trackpoint 
-      if(track == true){
-      }
-      else{
+      if(track == true){        
         PlaceOnThumb(6)translate([0,12.5,-7.25-.3]){
           translate([19/2,0,0])cylinder(d =2, 8);  //mount 
           translate([-19/2,0,0])cylinder(d =2, 8); //mount 
           cylinder(d =3, 10); // for stud
         }
       }
+      
       if(Mount == true){
         PlaceOnThumb(10)translate([0,0,8])cylinder(d1 =dMount, d2= dChamfer, 2.5, center = true);
         PlaceOnThumb(10)cylinder(d= dMount, 90, center = true);
@@ -732,6 +723,7 @@ module BuildTopPlate(keyhole = false, Mount = true, channel = false, platethickn
         BuildRmCn(R1, C4)modPlate(Hulls = true, hullSides = [0,0,TOP],        rows =R1, cols = C4);
         BuildRmCn(R1, C5)modPlate(Hulls = true, hullSides = [LEFT,0,TOP],     rows =R1, cols = C5);
         BuildRmCn(R1, C4)modPlate(Hulls = true, hullSides = [0,FRONT,TOP],    rows =R1, cols = C4);
+        BuildRmCn(R0, C4)modPlate(Hulls = true, hullSides = [LEFT,FRONT,TOP],    rows =R1, cols = C4);
         BuildRmCn(R2, C4)modPlate(Hulls = true, hullSides = [0,BACK,TOP],     rows =R2, cols = C4);
         BuildRmCn(R1, C5)modPlate(Hulls = true, hullSides = [LEFT,FRONT,TOP], rows =R1, cols = C5);
         BuildRmCn(R2, C5)modPlate(Hulls = true, hullSides = [LEFT,BACK,TOP],  rows =R2, cols = C5);
@@ -739,6 +731,7 @@ module BuildTopPlate(keyhole = false, Mount = true, channel = false, platethickn
       hull(){
         BuildRmCn(R2, C4)modPlate(Hulls = true, hullSides = [0,0,TOP],    rows = R2, cols = C4);
         BuildRmCn(R2, C5)modPlate(Hulls = true, hullSides = [LEFT,0,TOP], rows = R2, cols = C5);
+        BuildRmCn(R1, C4)modPlate(Hulls = true, hullSides = [0,FRONT,TOP], rows = R2, cols = C5);
       }
 
       if(Mount == true){
@@ -754,13 +747,10 @@ module BuildTopPlate(keyhole = false, Mount = true, channel = false, platethickn
               if(ClippedOrientation[rows][cols] == true){
                 Keyhole(clipLength = Clipped[rows][cols]);
                 modulate(PlateDimension,[0,sign(Clipped[rows][cols]),TOP],plateDim+[0,-abs(Clipped[rows][cols]),5], [0,-sign(Clipped[rows][cols]),TOP], Hull = false); //cut to prevent key caps snagging
-                }
-              else {
+              }else {
                 rotate([0,0,-90])Keyhole(clipLength = Clipped[rows][cols]);
                 rotate([0,0,-90])modulate(PlateDimension,[0,sign(Clipped[rows][cols]),TOP],plateDim+[0,-abs(Clipped[rows][cols]),5], [0,-sign(Clipped[rows][cols]),TOP], Hull = false); //cut to prevent key caps snagging
-                }
-              
-              
+              }
             }
           }
         }  
@@ -773,26 +763,26 @@ module BuildTopPlate(keyhole = false, Mount = true, channel = false, platethickn
   }
 }
 
-//##################   Section D:: PCB output for kicad and cuts   ##################
+//------------------  Section D:: PCB output for kicad and cuts 
 //fix modules callsS
 module PCBOUT(plateThickness, offsets, sides =TOP, col=0, row = 0) // Wire Channel
 {
   refDim =PlateDimension +[0,0,offsets];
-  buildDim =[PlateDimension[0]-3, PlateDimension[1], plateThickness];
+  buildDim =[PlateDimension[0]-3.9, PlateDimension[1], plateThickness];
   //left then right 
-  hull(){
+//  hull(){
     BuildRmCn(row,   col)modulate(refDim, [0,0,sides], buildDim, [0,0,BOTTOM],Hull = true, hullSide = [LEFT,FRONT,TOP]);
     BuildRmCn(row+1, col)modulate(refDim, [0,0,sides], buildDim, [0,0,BOTTOM],Hull = true, hullSide = [LEFT,BACK,TOP]);
     BuildRmCn(row,   col)modulate(refDim, [0,0,sides], buildDim, [0,0,BOTTOM],Hull = true, hullSide = [RIGHT,FRONT,TOP]);
     BuildRmCn(row+1, col)modulate(refDim, [0,0,sides], buildDim, [0,0,BOTTOM],Hull = true, hullSide = [RIGHT,BACK,TOP]);
-  }
+//  }
 //   BuildRmCn(row, col)modulate(refDim,[0,0,sides], buildDim, [0,0,BOTTOM]);
 }
 
 module PCBOUT2(plateThickness, offsets, sides =TOP, col=0, row = 0) // Wire Channel
 {
   refDim =PlateDimension +[0,0,offsets];
-  buildDim =[PlateDimension[0]-3, PlateDimension[1], plateThickness];
+  buildDim =[PlateDimension[0]-3.9, PlateDimension[1], plateThickness];
 //left then right 
   hull(){
     BuildRmCn(row, col)modulate(refDim, [0,0,sides], buildDim, [0,0,BOTTOM],Hull = true, hullSide = [LEFT,FRONT,TOP]);
@@ -872,8 +862,7 @@ module BuildPCBThumb(plateThickness, offsets, sides =TOP) // Wire Channel
   }
 }
 
-
-//#### Experimental shenanigans
+//-----------------   Experimental shenanigans
 module BuildFlick(plateThickness, offsets, sides =TOP, col=0){
   refDim   = PlateDimension +[0,0,offsets];
   buildDim = [PlateDimension[0], PlateDimension[1], plateThickness];
@@ -899,7 +888,7 @@ BaseTrans()difference(){
     ShiftTrans()BuildTopPlate(keyhole = false, Mount = false, channel = false, platethickness = 3);
     BuildThumbCluster(keyhole = false, track = false, Mount = true, Rotary = false, cliplength =4);
   }
-//  for(cols = [CStart:CEnd]){ ShiftTrans()BuildPCB(1.6, 3.8, BOTTOM, cols);}//PCB
+//  for(cols = [CStart:CEnd]){ShiftTrans()BuildPCB(1.6, 3.8, BOTTOM, cols);}//PCB
 //#  BuildPCBThumb(1.6, 3.8, BOTTOM);
 //  #ShiftTrans()BuildPCBInter(3, 3.8, BOTTOM, 1);
 //  #ShiftTrans()BuildPCBInter(3, 3.8, BOTTOM, 2);
@@ -915,16 +904,16 @@ BaseTrans()difference(){
 //  }
 //}
 
-// for Gintsugi.py output
+//// for Gintsugi.py output
 //color("blue")
-//for(col = [CStart:CEnd]){
+//for(col = [CStart:CEnd-1]){
 //  for(row = [0:1]){
 //    BaseTrans()ShiftTrans()PCBOUT(1.6, 3.8, BOTTOM, col,row);
 //    //BaseTrans()ShiftTrans()PCBOUT2(1.6, 3.8, BOTTOM, col,row);
 //  }
 //}
 
-//##################   Section F:: Key Caps   ##################  
+//##################   Section F:: Key Switches and Caps   ##################  
 module BuildSet2()
 {
   for(cols = [CStart:CEnd])
@@ -933,8 +922,7 @@ module BuildSet2()
     {
       BuildRmCn(rows, cols)
       if(ClippedOrientation[rows][cols] == true){Switch(colors = "Steelblue", clipLength = Clipped[rows][cols]);}
-      else {rotate([0,0,-90])Switch(colors = "Steelblue", clipLength = Clipped[rows][cols]-1);}
-        
+      else {rotate([0,0,-90])Switch(colors = "Steelblue", clipLength = Clipped[rows][cols]);}
     }
   }
 }
@@ -945,19 +933,24 @@ module BuildSetCaps()
   {
     for(rows = [R0:RMAX])
     {
-      BuildRmCn(rows, cols)
-      if(ClippedOrientation[rows][cols] == true) {keycap(rows+cols);}
-      else {rotate([0,0,-90])keycap(rows+cols);}
+      color()BuildRmCn(rows, cols)
+        {translate([0,0,8.9])keycap(rows+cols*(RMAX+1), ClippedOrientation[rows][cols], Clipped[rows][cols]);}
     }
   }
 }
-BaseTrans()ShiftTrans()BuildSet2();
+module BuildCap( cols = C1, rows= R0){keycap(rows+cols*(RMAX+1), ClippedOrientation[rows][cols], Clipped[rows][cols]);}
+
+//BaseTrans()ShiftTrans()BuildSet2();
+BaseTrans()ShiftTrans()BuildSetCaps();
+
+//BuildCap(cols = C1, rows= R0);
 //BaseTrans()for(i = [1])PlaceOnThumb(Rn = i)Switch([1,1,1],"Steelblue",clipLength = 4);
 ////BaseTrans()for(i = [7])PlaceOnThumb(Rn = i)RotaryEncoder(stemLength= 7, Wheel = 20);
 ////BaseTrans()for(i = [2])PlaceOnThumb(Rn = i)Switch([1,1.5,1],"silver");
-//BaseTrans()for(i = [5])PlaceOnThumb(Rn = i)translate([0,0,8.9])keycap();
+BaseTrans()for(i = [6])PlaceOnThumb(Rn = i)translate([0,0,8.9])keycap(3);
+BaseTrans()for(i = [5])PlaceOnThumb(Rn = i)translate([0,0,8.9])keycap(3);
 BaseTrans()for(i = [5])PlaceOnThumb(Rn = i)Switch([1,1,1],"Steelblue");
-//BaseTrans()for(i = [6])PlaceOnThumb(Rn = i)Switch([1,1,1],"Steelblue");
+BaseTrans()for(i = [6])PlaceOnThumb(Rn = i)Switch([1,1,1],"Steelblue");
 ////BaseTrans(){
 //BuildRmCn(R0, C3)rotate([120,0,0])translate([1,-11,12])Switch();
 
