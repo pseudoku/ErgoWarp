@@ -68,20 +68,20 @@ FingerLength = [ //proxial, intermediate, distal carpal length in mm
 
 //structure to hold column origin transformation
 ColumnOrigin = [//[translation vec] [rotation vec1] [rotation vec2]
-                [[  -55,  37,   6], [0,    0,   0], [ 0, 90,  0]], //INDEX 1 knuckle
-                [[  -32,  35,   6], [0,    0,   0], [ 0, 90,  0]], //INDEX 2 knuckle
-                [[  -18,  36,   6], [0,    0,   0], [ 0, 90,  0]], //INDEX 3 knuckle
-                [[    0,  36,   0], [0,    0,   0], [ 0, 90,  0]], //MIDDLE knuckle
-                [[   20,  37,  -7], [0,    0, -10], [ 0, 90,  0]], //RING knuckle
-                [[ 43.5,  24,  -5], [0,    0, -42], [ 0, 90,  7]], //PINKY 1 knuckle
-                [[ 57.5,10.5,-7.5], [0,    0, -43], [ 0, 90,  7]], //PINKY 2 knuckle
-                [[   48, -63,  25], [10, -27,  15], [90,  0, -3]]  //Thumb wrist root
+                [[  -55,  37,   6], [0, 0,   0], [ 0, 90,  0]], //INDEX 1 knuckle
+                [[  -32,  35,   6], [0, 0,   0], [ 0, 90,  0]], //INDEX 2 knuckle
+                [[  -18,  36,   6], [0, 0,   0], [ 0, 90,  0]], //INDEX 3 knuckle
+                [[    0,  36,   0], [0, 0,   0], [ 0, 90,  0]], //MIDDLE knuckle
+                [[   20,  37,  -7], [0, 0, -10], [ 0, 90,  0]], //RING knuckle
+                [[ 43.5,  24,  -5], [0, 0, -42], [ 0, 90,  7]], //PINKY 1 knuckle
+                [[ 57.5,10.5,-7.5], [0, 0, -43], [ 0, 90,  7]], //PINKY 2 knuckle
+                [[   -5, -72,  10], [0, 0,   0], [90,  0,  0]]  //Thumb wrist root
                ];
 
 // structure to pass to thumbplacement module
 ThumbPosition = 
  [//[[thetaDist, thetaMed, thetaProx, phiProx][rotation angle][rotation angle2][translation vec]]
-    [[15, 30, 35, 0], [ 0,  80, 0], [90, 0,   0], [   -6,   -20, -PlateHeight-51  ]], //T0 quantary palm
+    [[15, 30, 30, 0], [ 0,  -90, 0], [0, 0,   0], [0,-4,-PlateHeight-5]], //T0 quantary palm
     [[15, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [  -13 ,  -5.5, -PlateHeight-13 ]], //*T1 Secondary tip low prof
     [[15, 30, 35, 0], [ 0,  20, 0], [90, 0,   0], [  -19,   -20, -PlateHeight-36  ]], //T2 Tertiary palm
     [[ 0, 30, 35, 0], [ 0, -25, 0], [ 0, 0,   0], [-13.5, -19.5, -PlateHeight-13  ]], //*T3 Secondary  butt Clipped
@@ -145,7 +145,7 @@ PathSideRm   = [IN, OUT, OUT, OUT, OUT]; // switch placement Path
 KeyOriginCnRm = [for( i= [C0:C6])[[0,BottomHeight+KeycapOffset[i],0], for(j = [R1:R4])[0,TopHeight+KeycapOffset[i],0]]];
 //row and column loop setter
 RMAX         = R2;  // Set max rows on columns
-CStart       = C1;  // Set column to begin looping for the build
+CStart       = C2;  // Set column to begin looping for the build
 CEnd         = C6;  // Set column to end for the build
 ThetaFlick   = 85;   
   
@@ -886,7 +886,7 @@ module ShiftTrans() {translate([0,0,0])rotate([45,0,0])children();}
 BaseTrans()difference(){
   union(){
     ShiftTrans()BuildTopPlate(keyhole = false, Mount = false, channel = false, platethickness = 3);
-    BuildThumbCluster(keyhole = false, track = false, Mount = true, Rotary = false, cliplength =4);
+    BuildThumbCluster(keyhole = false, track = false, Mount = false, Rotary = false, cliplength =4);
   }
 //  for(cols = [CStart:CEnd]){ShiftTrans()BuildPCB(1.6, 3.8, BOTTOM, cols);}//PCB
 //#  BuildPCBThumb(1.6, 3.8, BOTTOM);
@@ -941,19 +941,19 @@ module BuildSetCaps()
 module BuildCap( cols = C1, rows= R0){keycap(rows+cols*(RMAX+1), ClippedOrientation[rows][cols], Clipped[rows][cols]);}
 
 //BaseTrans()ShiftTrans()BuildSet2();
-BaseTrans()ShiftTrans()BuildSetCaps();
+//BaseTrans()ShiftTrans()BuildSetCaps();
 
 //BuildCap(cols = C1, rows= R0);
 //BaseTrans()for(i = [1])PlaceOnThumb(Rn = i)Switch([1,1,1],"Steelblue",clipLength = 4);
 ////BaseTrans()for(i = [7])PlaceOnThumb(Rn = i)RotaryEncoder(stemLength= 7, Wheel = 20);
 ////BaseTrans()for(i = [2])PlaceOnThumb(Rn = i)Switch([1,1.5,1],"silver");
-BaseTrans()for(i = [6])PlaceOnThumb(Rn = i)translate([0,0,8.9])keycap(3);
-BaseTrans()for(i = [5])PlaceOnThumb(Rn = i)translate([0,0,8.9])keycap(3);
+//BaseTrans()for(i = [6])PlaceOnThumb(Rn = i)translate([0,0,8.9])keycap(3);
+//BaseTrans()for(i = [5])PlaceOnThumb(Rn = i)translate([0,0,8.9])keycap(3);
 BaseTrans()for(i = [5])PlaceOnThumb(Rn = i)Switch([1,1,1],"Steelblue");
 BaseTrans()for(i = [6])PlaceOnThumb(Rn = i)Switch([1,1,1],"Steelblue");
 ////BaseTrans(){
 //BuildRmCn(R0, C3)rotate([120,0,0])translate([1,-11,12])Switch();
 
-
-
-
+BaseTrans()for(i = [0])PlaceOnThumb(Rn = i, stick =true);
+BaseTrans()ShiftTrans()cube([10,10,10],center = true);
+BaseTrans()for(i = [0])PlaceOnThumb(Rn = i)cube([10,10,10], center = true);
