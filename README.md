@@ -112,3 +112,22 @@ Sacrifice your switches and clip the unnecessarily LED compartment (unless you h
 
  ![and voila abomination is born](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Flicked.jpg)
  ![Take it to the next Level](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Ver8.jpg)
+
+
+## version history
+
+working proto ver 1.
+  6x4 8 thumb cluster. plate and backplate design with static tenting. Single hand build to get use to QMK and type testing. Key placement were not bad
+working proto ver 2.
+  5x4 9 thumb cluster. plate only with wooden palm rest. Added roll angles to improve approach angle. Thumb cluster where designed at optimal flexions, but due to collision with index column it was move proximal, which proved to be disastrous. ternary index column was removed as it was a stretch to push and was there to provide structure to unimplemented trackpoint module.  
+working proto ver 3.
+  6x3 6 thumb cluster. Tried to build with low profile switches to improve thumb cluster placement. In retrospect I should avoided drastic change to thumb design and worked on placement, but I attempted to reduce travel distance by implementing cluster that ended up looking akin to DataHand. Added secondary pinkie column to compensate key counts. Removed R1 rows as extension required to actuate a switch was strenuous. shattered to pieces prior to being fully tested.
+working proto ver 4.
+  I don't want to talk about it.
+working proto ver 5.  
+  5x3 6 thumb cluster. Flat keycap profile increased travel distance on R4, R2 and clusters. Attempted printing custom keycap, but material was too fragile for choc style legs. Further exaggerated thumb cluster, which only aggravated my distaste for short keypress of low profile.
+working proto ver 6.
+  6x3 5 thumb cluster. Moved back to full switches. Integrated palm/wrist rest. Implemented some palm switches half-heartedly as my thirst for navigation cluster grew.
+
+proto ver 7. <- we are here
+  6x3? n thumb cluster. unapologetically warped. Implemented clipped switches. with compact inner index R4 and removed outer index R4. Thumb cluster is retuned. 
