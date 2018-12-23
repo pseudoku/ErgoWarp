@@ -75,6 +75,7 @@ These design restrictions and compromises resulted in 4 key design. while I woul
 
 ![Proto 2](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Proto2FrontView.jpg)
 
+
 ## Tracking Device
 * Trackpoint
 Prototype 1 used T4 position as Trackpoint. Though not fully tested the design is not stiff enough and require some modification
@@ -130,4 +131,4 @@ working proto ver 6.
   6x3 5 thumb cluster. Moved back to full switches. Integrated palm/wrist rest. Implemented some palm switches half-heartedly as my thirst for navigation cluster grew.
 
 proto ver 7. <- we are here
-  6x3? n thumb cluster. unapologetically warped. Implemented clipped switches. with compact inner index R4 and removed outer index R4. Thumb cluster is retuned. 
+  6x3? n thumb cluster. unapologetically warped. Implemented clipped switches. with compact inner index R4 and removed outer index R4. Thumb cluster is retuned.

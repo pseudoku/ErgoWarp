@@ -1,5 +1,12 @@
 /* [Key] */
 use <scad-utils/morphology.scad> //for cheaper minwoski 
+use <scad-utils/lists.scad>
+use <scad-utils/transformations.scad>
+use <scad-utils/shapes.scad>
+use <scad-utils/trajectory.scad>
+use <scad-utils/trajectory_path.scad>
+use <sweep.scad>
+use <skin.scad>  
 
 key_length = 1;  //length in units of key
 key_height = 1;  //height in units of key. should remain 1 for most uses
@@ -21,8 +28,8 @@ stem_inset = 0;    // how inset the stem is from the bottom of the k ey. experim
 stem_offset = 0;   // stem offset in units NOT MM. for stepped caps lock
 
 /* [Hidden] */
-$fn = 32;          //change to round things better
-resfactor = 8;   //fn division factor to reduce load
+$fn = 64;          //change to round things better
+resfactor = 2;   //fn division factor to reduce load
 unit = 19.05;      //beginning to use unit instead of baked in 19.05
 minkowski_radius = 1.75; //minkowski radius. radius of sphere used in minkowski sum for minkowski_key function. 1.75 default for faux G20
 
@@ -48,11 +55,11 @@ key_profiles = [
 	[18.16,     18.16,  6,      4,      8.5,    -1,     1.75,     0,       1,       0,        0,        false],//C0R1 unusede 
 	[18.16,     18.16,  6.2,    4,      7.5,	  3,      1.75,     0,       1,       0,        0,        false],//C0R2 unused 
   
-	[18.16,     18.16,  5.7,    4,      7.4,    -2,     -1.5,     1,       1.2,     0,        0,        false],//C1R0 clipped G20 like
-	[18.16,     18.16,  5.7,    5.7,    7.4,    0,      0,        1,       1.2,     0,        0,        false],//C1R1 clipped G20 DSA 
-  [18.16,     18.16,  5.7,    4,      7.4,    -5,      1.5,     1,       1.2,     0,        0,        false],//C1R2 clipped G20 like
+	[18.16,     18.16,  5.7,    4,      7.4,    -2,     -1.5,     4,       1.2,     0,        0,        false],//C1R0 clipped G20 like
+	[18.16,     18.16,  5.7,    5.7,    7.4,    0,      0,        0,       1.2,     0,        0,        false],//C1R1 clipped G20 DSA 
+  [18.16,     18.16,  5.7,    4,      7.4,    -5,      1.5,     4,       1.2,     0,        0,        false],//C1R2 clipped G20 like
   
-	[18.4,      18.4,   3,      5.7,    7.4,    0,      0,        1,       2,       -3,        -2,        false],//C2R0 clipped tilted
+	[18.4,      18.4,   3,      5.7,    7.4,    0,      0,        4,       2,       -3,        -2,        false],//C2R0 clipped tilted
 	[18.4,      18.4,   3,      5.7,    7.4,    0,      0,        1,       2,       -3,        0,        false],//C2R1 clipped tilted
 	[18.4,      18.4,   3,      5.7,    7.4,    -5,     1.5,      1,       2,       -3,        0,        false],//C2R2 clipped tilted
   
@@ -72,8 +79,13 @@ key_profiles = [
 	[18.16,     18.16,  4,      5.7,    7.4,      0,      0,        1,     .5,      0,        0,       false],//C6R1  true
 	[18.16,     18.16,  4,      3,      7.5,	   -4,      1.5,      1,     1,       1,        -1,        false] //C6R2 
 ];
-test = 20;
-mirror([1,0,0])keycap(test, clipOrientation = false, clipLen = -4);
+
+test = 6;
+chamf = 1.5;
+step = 5;
+tilt = [0,0,-0];
+freq = 1*step;
+
 /*
 references
 // BotWid     BotLen  TopWidD TopLenD totDep  TopTilt TopSkew | DishType DishDep  DishSkewX DishSkewY
@@ -115,7 +127,7 @@ function top_total_key_width(capIDs) = capDim(capIDs,bottom_key_width) + (unit *
 function top_total_key_height(capIDs) = capDim(capIDs,bottom_key_height) + (unit * (key_height - 1)) - capDim(capIDs,height_difference);
 
 
-module roundedRect(size = [0,0,0], radius= 1.5) { //simplified to single call using Morphology Util lib
+module roundedRect(size = [0,0,0], radius= 2) { //simplified to single call using Morphology Util lib
   linear_extrude(size[2])rounding(r=radius)square([size[0], size[1]], center = true);
 }
 
@@ -209,11 +221,11 @@ module outside(capID, thickness_difference){
 // super basic hull shape without dish
 module shape_hull(capID, thickness_difference, depth_difference, modifier = 1){
 	hull(){
-		roundedRect([total_key_width(capID) - thickness_difference, total_key_height(capID) - thickness_difference, .001],1.5);  //Base Plate 
+		roundedRect([total_key_width(capID) - thickness_difference, total_key_height(capID) - thickness_difference, .001], chamf);  //Base Plate 
 
 		translate([0,capDim(capID,top_skew),capDim(capID,total_depth) * modifier- depth_difference])
       rotate([-capDim(capID,top_tilt),0,0])
-        roundedRect([total_key_height(capID) - thickness_difference - capDim(capID,width_difference) * modifier, total_key_height(capID) - thickness_difference - capDim(capID,height_difference) * modifier, .001],1.5); //Top Plate
+        roundedRect([total_key_height(capID) - thickness_difference - capDim(capID,width_difference) * modifier, total_key_height(capID) - thickness_difference - capDim(capID,height_difference) * modifier, .001],chamf); //Top Plate
 	}
 }
 
@@ -322,6 +334,80 @@ module fullset(){
  }
 }
 
-fullset();
+
+
+//--- experimental cuts 
+
+
+
+function ellipse(a, b, d = 0, rot1 = 0, rot2 = 360) = [for (t = [rot1:step:rot2]) [a*cos(t), b*sin(t)*(1+d*cos(t))]]; //shape to 
+//function rounding(a, b, r, rot1, rot2) = [for (t = [rot1:step:rot2]) [r*cos(t)+a, r*sin(t)+b]];
+function rounding(a, b, ox, oy, rot1, rot2) = [for (t = [rot1:step:rot2]) [a*cos(t) - a*cos(rot1) + ox, b*sin(t) - b*sin(rot1) + oy]];
+function rounding2(a, b, ox, oy, rot1, rot2) = [for (t = [rot1:step:rot2]) [a*cos(t) - a*cos(rot2) + ox, b*sin(t) - b*sin(rot2) + oy]];
+function shape1 (a,b,c,d) = 
+  concat(
+   [[a,-c]],
+
+    ellipse(a, b, d = 0, rot2 = 180),
+   [[-a,-c]]
+  );
+
+function shape2 (a,b,c,d) = 
+  concat(
+   [[c,b]],
+    ellipse(a, b, d, rot1 = 90, rot2 = 270),
+   [[c,-b]]
+  );
+
+function shape3 (a,b,boarder,r1, r2, a1, a2) = 
+  concat(
+    [[boarder,b]],
+    reverse(rounding(a/4, b/4, -a*cos(-90+a1), -b*sin(-90+a1), rot1 = -90+a1, rot2 = 90)),
+    ellipse(a, b, d = 0 ,rot1 = 90+a1, rot2 = 270-a2),
+    reverse(rounding2(a/4, b/4, a*cos(270-a2), b*sin(270-a2), rot1 = -a2, rot2 = a2*2)),
+    [[boarder,-b]]
+  );
+
+
+function oval_path(theta, phi, a, b, c, deform = 0) = [
+ a*cos(theta)*cos(phi), //x
+ c*sin(theta)*(1+deform*cos(theta)) , // 
+ b*sin(phi),
+]; 
+  
+path_trans2 = [for (t=[0:step:180]) translation(oval_path(t,2,10,15,2,0))*rotation([0,90,0])];
+
+pathtraj   = [
+                trajectory(forward = 5, pitch = -10, roll = 0),
+                trajectory(forward = 3, pitch = -60, roll = 0),
+                trajectory(forward = 11, pitch = 30, roll = 0),
+              ];
+
+pathtraj2   = [
+                trajectory(forward = 4.5, pitch = 5 , roll = 0),
+                trajectory(forward = 7, pitch = -93, roll = 0),
+                trajectory(forward = 5, pitch = 35, roll = 0)
+              ];
+
+
+path  = quantize_trajectories(pathtraj,  steps = 360/step, loop=false, start_position= $t*4);
+path2 = quantize_trajectories(pathtraj2, steps = 360/step, loop=false, start_position= $t*4);
+//path3 = quantize_trajectories(pathtraj3, steps = 10,  loop=false, start_position= $t*4);
+
+
+clip =  [ for(i=[0:len(path)-1])   transform(path[i], shape3 (a = 1.5,b = 10, boarder =8, r1 = 1.5, r2 = 1.5, a1 =30, a2 = 30))];
+clip2 = [ for(i=[0:len(path2)-1])  transform(path2[i], shape3 (a = 1.5 ,b = 10, boarder =8, r1 = 1.5, r2 = 1.5, a1 =30, a2 = 30))];
+
+clip3 =  [ for(i=[0:len(path)-1])   transform(path[i], shape3 (a = 1.25-.1*cos(i*freq/step),b = 10, boarder =10, r1 = 1.5, r2 = 1.5, a1 =30, a2 = 30))];
+clip4 = [ for(i=[0:len(path2)-1])  transform(path2[i], shape3 (a = 1.25-.1*cos(i*freq/step) ,b = 10, boarder =10, r1 = 1.5, r2 = 1.5, a1 =30, a2 = 30))];
+
+mirror([1,0,0])difference(){
+  keycap(test, clipOrientation = false, clipLen = -4);
+    translate([0,0,8])rotate([00,-90,90])rotate(tilt)skin(clip2);
+    translate([0,0,8])rotate([0,-90,-90])rotate(tilt)skin(clip);
+}
+
+
+//fullset();
 //	// preview cube, for seeing inside the keycap
 //cube([100,100,100]);
