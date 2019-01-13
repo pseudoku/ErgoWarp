@@ -103,7 +103,7 @@ module Cutter()
 
 //MX series keyhole
 // TODO: add alps support?
-module Keyhole(tol = .1, cutThickness = 5, clipLength = 0)
+module Keyhole(tol = .1, cutThickness = 3.25, clipLength = 0)
 {
   $fn = 40;
   bottom_length = 13.9+tol;

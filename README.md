@@ -1,9 +1,7 @@
 # Ergo-Warped
-Design Log and Code Repo for Customizable Split Keyboard
-
+When you require that extra curvature.
 ![Prototype Ver 6](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Proto6.jpg)
 
-## _Under Construction_
 ## Index
  * Design Goal
  * Todo
@@ -15,26 +13,24 @@ Design Log and Code Repo for Customizable Split Keyboard
  * Unholy Acts
 
 ## Design Goal:
-* Customizable Parametric Function
+* Parametric design
 * Minimize finger movement
-* Dense and Comfortable Thumb Cluster
+* Attain optimal thumb cluster position
 * Adjustable tenting
-* Tracking device
-  * _in progress_
+* Tracking device  _in progress_
+* Adjustable palm rest
 * Alternate Layout
 
-## Todo (11/22/2018)
+## Todo (12/XX/2019)
 * Test Trackpoint Module
-* Generalize the Path function
-* Clean up codes
-* Grammar
+* Generalize the Path function (volunteers?)
 
 ## Design
 ### Finger Placement
 ![Prototype 7 Mockup](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Proto7.jpg)
 
-Simplification of finger flexion:
- Define two arcs: inner (distal and intermediate flexion) and outer(distal, intermediate, proximal flexion) with metacarpal phalangeal joint as the origin. They simulate trigger motion and grab motion respectively and it is assumed that optimal placement of key switches will reside somewhere between two functions.  
+Reconsidering the arcs and finger flexion:
+ Define two arcs: inner (distal and intermediate flexion) and outer(distal, intermediate, proximal flexion) with metacarpal phalangeal joint as the origin. They simulate trigger motion and grab motion respectively and it is assumed that optimal placement of key switches will reside somewhere between two functions.
 
 * Define R0 as a natural trigger, orientated tangential to the inner arc at θ=~ 90°  to simulate full adbuction
 * Define R2 as a natural tap, orientated normal to the outer arc at θ= ~60°
@@ -42,38 +38,45 @@ Simplification of finger flexion:
  * Define secondary origin, an intermediate joint of a finer.
  * An angle bisected by vectors pointing to the secondary origin R0 and R2 position.
  * Intersection of such vector to the outer path orientated normal to the path.
-* "But I wanna more row switches!" See Unholy Acts Sections
+Given my hand size, R2 must be compromised in order to make R3 and on work properly, which counters the design. Refer older commits for your amusement.
 
-TODO add description on roll
+These placement and orientation minimizes the finger travel and simplify presses away from home rows into singular motion. This takes care of the translation, but not orientation completely. There is a natural buckling in finger tips motion and they do not move in plane with metacarpal tangential plane. This is addressed by introducing a columnar roll angle and separately from the arc's orientation at origin.  
 
-Note on some of the observations made during the design iteration on each columns.
+Note on some of the observations made during the design iteration on each columns with heavy curvature.
 
-* Column 0: (Ternary Index) though feasible, difficult to press and infrequently used key set not recommended (see Prototype 1) R0 is somewhat acceessible, if you must.
+* Column 0: (Ternary Index) though feasible, difficult to press and infrequently used key set not recommended (see Prototype 1) R0 is somewhat accessible, if you must.
 * Column 1: (Secondary Index) Rolled by 20°, at this angle R0 caps(DSA) must be clipped.
-* Column 2: (Primary Index) not rolled, though ideally 15° is desirable, but it would collide with C3. There is also natural yaw of ~12°, but in order to accommodate C0 & C1 it is ignored.
+* Column 2: (Primary Index) Rolled by 5°, though ideally 15° is desirable, but this would cause collision with C3. There is also natural yaw of ~12°, but in order to accommodate C0 & C1 it is ignored.
 * Column 3: (Middle) 9° roll. ideally more is desirable, but again will collide with C2 and C4.   
-* Column 4: (Ring) 12° switch roll.
+* Column 4: (Ring) 12° switch roll. yawed by 10°
 * Column 5: (Pinky) neutral position has great enough yaw ~42° to split the column from the rest, as observed in top view.
 Compact column was tested, but results required continual effort to keep finger on column.
 * Column 6: (Secondary Pinky) R0 and R1 is good candidate. It's an attractive option if you wish to support such tradition rather than using the thumb cluster.
+Note: these are my thoughts on non-clipped boards from old protos.
+
+###Cutting Corners: Clipping Switches and Keycaps
+Okham hath spake. entia non sunt multiplicanda praeter necessitatem. "LED compartment is useless and wasted space." and I will follow his adage.
+
+As noted above, C0, C1, and C6 is a reach for my stubby finger and something had to give.
+Perhaps out of frustration, Something transpired in me to amputate switches and the result was Amazing! ~~(it will wobble unless glued, it will not seat properly on a plate requiring a PCB, but that's no problem)~~
+![I dare you to do this on a holy panda.](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Clipped1.jpg)
+![Now Kisssssssss!](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Clippedl2.jpg)
+now let's revisit
+* Column 0: Applied vertically clipped. More plausible for R1 and R2
+* Column 1: Applied vertically. Removed R0 to improve thumb cluster position.  
+* Column 2: Applied vertically.
+* Column 5: Applied to R1 to bring R2 closer to optimal location.
+* Column 6: Applied vertically.
+
+placing horizontally clipped and compact R2 and R3 were attempted, but typo became more prominent.
 
 ### Thumb Cluster Design
-Initial attempts sought to pack as many switches near the ideal thumb motion without considering column orientation. while accessible they did not produce efficient press and produced strain because thumb position was restricted to this 'ideal' position.
+Initial attempts sought to pack as many switches near the ideal thumb motion without considering column orientation.
 ![](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/asht.jpg)
+They were comfortable by themselves, but collision with index columns deviated the placement too greatly from optimal and render them useless at best. This threw the next design iterations into spiral of bad compromises, which was fruitless.
 
-* design that allowed comfortable press even if wrist position and orientation deviates. should not constrict wrist motion and placement
-* simple and compact motion to actuate is desirable. Avoid long abducted position which produce excessive motion especially given C1 collision.
-* do not overburden thumb with keys.
-* enforcing thumb tip to press is unnecessarily restriction. use proxiamal phalagenes.
-* if possible make chording easy.
+This changed with clipped columns. Index columns were compact enough that sacrificing C1R0 will result in optimal thumb position.    
 
-These design restrictions and compromises resulted in 4 key design. while I would've liked 5 keys and attempted numerous times, they produced awkward press or restricted wrist position. Palm press broke 1st rule. down shifted C0 or C1 key produced awkward keypress. any button on C2 and on produced restraint on wrist position.
-
-![Initial Mock UP ](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Dummy1BackView.jpg)
-
-![Proto  1](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Proto1FrontView.jpg)
-
-![Proto 2](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Proto2FrontView.jpg)
 
 
 ## Tracking Device
@@ -99,20 +102,6 @@ A valid excuse to make my own layout.
 vertical transition, especially to R0 is fast, thus Workman layout philosophy jived well on initial trial. Furthermore, mitosis default layer imitating maltron layout gave me the starting point for the thumb cluster. As a personal preference, emphasis on rolling and same hand typing were also considered.
 
 ![Layout warpman](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/WarpmanLayout.jpg)
-
-## Unholy Acts: R4 and Beyond
-So you wanna more switched with out compromising comfort? and willing to commit heinous things and the unspeakable? me too, me too. now read on...
-### Clipping Switches and Keycaps
-Sacrifice your switches and clip the unnecessarily LED compartment (unless you have access to healthy supply of compact SKCL, then, weeell GOOD for you!) and print a keycaps or clip your keycaps as well. (RIP Olivia and Godspeed) Now, apply this on R3 and cram that R4.
-![I dare you to do this on a holy panda.](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Clipped1.jpg)
-![Now Kisssssssss!](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Clippedl2.jpg)
-
-### Flick Switches
- This thing is not warped enough and still somewhat conceivable as a keyboard. Fret not, because we can get to DataHand territory of bewilderment!
- there is another motion you have not considered. YES! ~~Flipping~~ Flicking off motion. rotate your RMax by 90 degree or thereabout.
-
- ![and voila abomination is born](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Flicked.jpg)
- ![Take it to the next Level](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Ver8.jpg)
 
 
 ## version history
