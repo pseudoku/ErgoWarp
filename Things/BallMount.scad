@@ -1,8 +1,8 @@
 //Length of the arm, ball center to ball center, in milimeters.
-$fn = 32;
+$fn = 128;
 length = 30;
 //Do you want a nut trap? 
-nut_trap = "yes";//[no,yes]
+nut_trap = "no";//[no,yes]
 //Do you want to use two bolts or just one? (for longer arms, two bolts work better.)
 bolt_holes = "one";//[one,two]
 //What size of bolt do you want?
@@ -84,8 +84,9 @@ arm_width = 20;
 shell_thickness = ball_radius+3.3; 
 opening_slot = 19;
 top = true;
+dMount       = 5.1054; // mounting bore size
 
-
+BallMount();
 module BallMount() {
 translate([-length/2,0,0])
 rotate(a=[0,0,0])
@@ -97,18 +98,26 @@ rotate(a=[0,0,0])
 			//Outer shells at ends
       hull(){
         translate([-1*(length/2),0,0]) sphere(shell_thickness, center=true);
-        translate([(length/2),0,0]) sphere(shell_thickness, center=true);
-      }
+//        translate([(length/10),0,0]) sphere(shell_thickness/1.25, center=true);
+//              translate([-1*((length/2) -3),0,shell_thickness]) rotate([90,0,0]) cylinder(d=dMount*2.5, h=shell_thickness*2, center = true);
+      } 
+      hull(){
+        translate([-1*(length/2),0,0]) sphere(shell_thickness, center=true);
+        translate([-6,0,0]) sphere(shell_thickness, center=true);
+      } 
+      
+      translate([0,9,2])cylinder(d=dMount*2, h=shell_thickness-4, center = false);
+      translate([0,-9,2])cylinder(d=dMount*2, h=shell_thickness-4, center = false);
 //			translate([0,0,(shell_thickness)/2]) rotate([45,0,0]) cube([length,arm_width,arm_width], center=true);
 		}
 		union()
 		{
 			//Interior hollows
 			translate([-1*(length/2),0,0]) sphere(ball_radius, center=true);
-			translate([(length/2),0,0]) sphere(ball_radius, center=true);
+//			translate([(length/2),0,0]) sphere(ball_radius, center=true);
       
 			//Shave off the top
-			translate([0,0,27])  cube([length*3,100,20], center=true);
+//			translate([0,0,27])  cube([length*3,100,20], center=true);
 			//Shave off the bottom
 			translate([0,0,-8])  cube([length*3,100,20], center=true);
       
@@ -129,7 +138,7 @@ rotate(a=[0,0,0])
 			}
       
       //Extra screw hole
-
+//      translate([-1*((length/2) -3),0,shell_thickness]) rotate([90,0,0]) cylinder(d=dMount, h=shell_thickness*2, center = true);
 			//Exterior lip parts
 			union()
 			{

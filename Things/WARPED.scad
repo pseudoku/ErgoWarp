@@ -1,5 +1,5 @@
 use <Switch.scad> //modules for mx switch and key holes o
-use <Keycaps.scad>
+//use <Keycaps.scad>
 use <PalmRest.scad>
 use <BallMount.scad>
 use <BallMount2.scad>
@@ -150,9 +150,9 @@ PathSideRm   = [IN, OUT, OUT, OUT, OUT]; // switch placement Path
 
 KeyOriginCnRm = [for( i= [C0:C6])[[0,BottomHeight+KeycapOffset[i],0], for(j = [R1:R4])[0,TopHeight+KeycapOffset[i],0]]];
 //row and column loop setter
-RMAX         = R1;  // Set max rows on columns
+RMAX         = R2;  // Set max rows on columns
 CStart       = C1;  // Set column to begin looping for the build
-CEnd         = C5;  // Set column to end for the build
+CEnd         = C6;  // Set column to end for the build
 ThetaFlick   = 90;   
   
 //------ SOLVER  FUNCTIONS
@@ -1017,7 +1017,7 @@ module ShiftTrans() {translate([0,0,0])rotate([45,0,0])children();}
 
 BaseTrans()difference(){
   union(){
-    ShiftTrans()BuildTopPlate(keyhole = true, Mount = false, channel = false, platethickness = 3);
+    ShiftTrans()BuildTopPlate(keyhole = false, Mount = false, channel = false, platethickness = 3);
     BuildThumbCluster(keyhole = false, track = false, Mount = false, Rotary = false);
     for(cols = C1){
       ShiftTrans(){
