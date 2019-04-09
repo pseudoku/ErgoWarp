@@ -12,7 +12,8 @@ use <skin.scad>
 $fn = 48;
 step = 5;
 dMount = 5.1054; // mounting bore size
-dBall    = 25.4; //for ball mount  
+dMountMM = 5;
+dBall    = 18; //for ball mount  
 
 len_ind   = 68; 
 len_mid   = 88; //from mid knuckle to base of wrist 
@@ -58,7 +59,9 @@ module origin_palm(){translate([wid_pin,0,-len_mid])rotate(ang_pin)children();}
 //shape functions 
 function ellipse(a, b, d = 0) = [for (t = [0:step:360]) [a*cos(t), b*sin(t)*(1+d*cos(t))]]; //shape to 
 function ellipse2(a1, b1, a2, b2, d1 = 0, d2 = 0 ) = [for (t = [0:step:360]) t>180 ? [a1*cos(t), b1*sin(t)*(1+d1*cos(t))] : [a2*cos(t), b2*sin(t)*(1+d2*cos(t))] ]; //shape to 
-
+  
+function ellipse3(a1, b1, a2, b2, d1 = 0, d2 = 0 ) = [for (t = [0:step:360]) (t>90 && t<270) ? [a1*cos(t), b1*sin(t)*(1+d1*cos(t))] : [a2*cos(t), b2*sin(t)*(1+d2*cos(t))] ]; //shape to 
+  
 // sweep generators 
 // pinkie palm ring 
 module pinkie_ring() {
@@ -66,19 +69,34 @@ module pinkie_ring() {
   b = 18; 
   c = 15;
   function shape() = ellipse(1.5, 4);
-  function shape2() = ellipse(1.5, 10);
+  function shape2() = // ellipse(1.5, 10);
+    ellipse3(
+    a1 = 1.5,
+    b1 = 4,
+    a2 = 3, 
+    b2 = 4, 
+    d1 = 0, 
+    d2 = 0);
+  
   path_transforms =  [for (t=[0:step:180])   translation(oval_path3(t,40,a,b,c,0,1,-0.1))*rotation([90,-90+10*sin(t/2),t])];
   path_transforms2 = [for (t=[180:step:270]) translation(oval_path3(t,40,a,b,c,15,1,-.1))*rotation([90,-80-30*sin(t),t])];  
   path_transforms3 = [for (t=[270:step:360]) translation(oval_path3(t,40,a,b,c,15,1,-.1))*rotation([90,-90-40*sin(t),t])];  
       
-  origin_pinkie()sweep(shape(), path_transforms);
-  origin_pinkie()sweep(shape(), path_transforms2);
-  origin_pinkie()sweep(shape(), path_transforms3);
+  origin_pinkie()sweep(shape2(), path_transforms);
+  origin_pinkie()sweep(shape2(), path_transforms2);
+  origin_pinkie()sweep(shape2(), path_transforms3);
 }
 
 module thumb_ring() {
   function shape()  = ellipse(4, 2);
-  function shape2() = ellipse(4, 2);
+  function shape2() = // ellipse(1.5, 10);
+    ellipse2(
+    a1 = 4,
+    b1 = 3,
+    a2 = 4, 
+    b2 = 2, 
+    d1 = 0, 
+    d2 = 0);
 
 //  path_transforms =   [for (t=[0:step:185]) translation(oval_path2(t,0,21,10,24,0,1,0))*rotation([90,20*sin(t),t])]; 
   path_transforms  =  [for (t=[  0:step:180]) translation(oval_path3(t,-40,26,22,24,30,1,-0))*rotation([90,0-50*sin(t),t])]; 
@@ -86,7 +104,7 @@ module thumb_ring() {
   path_transforms3 =  [for (t=[  0:step:180]) translation(oval_path3(t,-40,26,28.5,24,45,1,.2))*rotation([90,0-50*sin(t),t])];  
   
 //  origin_thumb()rotate([110,90,0])translate([0,42,0])rotate([90,0,180])sweep(shape2(), path_transforms);
-  origin_thumb()rotate([80,90,0])sweep(shape2(), path_transforms);// lipped
+  origin_thumb()rotate([80,90,0])sweep(shape(), path_transforms);// lipped
   origin_thumb()rotate([80,90,0])sweep(shape2(), path_transforms2);// front 
   origin_thumb()rotate([80,90,0])sweep(shape2(), path_transforms3);// Support
 
@@ -170,15 +188,27 @@ clip4 = [for (i=[0:len(path5)-1]) transform(path5[i],
     d2 = -.4)
 )];   // skin for main palm structure  // skin for main palm structure 
 
-//Palm Build
+MountTran = [-18,-6,-7];
+//Palm Rest Build
 difference(){
   union(){
 //    #translate([-7,-23,65])rotate([0,40,0])cylinder(d1 = 16.5, d2 = 17, 8, center = true);
-    translate([-60,-5,24])rotate([0,-90,165])skin(clip3); 
-    translate([-0,-25,52])rotate([0,40,-30]){
-      translate([18,0,4])cylinder(d= 10, 10, $fn = 64, center = true); // Ball Mount
-      translate([-18,-0,4])cylinder(d= 10,10, $fn = 64, center = true); // Ball Mount
-      } 
+    translate([-60,-5,24])rotate([0,-90,165])skin(clip3);
+      
+    translate([-0,-10,51])rotate([0,40,-10]){ // mounts
+      translate([-22,-5,8])rotate([0,0,0]) cylinder(d= 10, 7, $fn = 64, center = true); 
+      translate([12,-25,3])rotate([0,0,0]) cylinder(d= 10, 10, $fn = 64, center = true); 
+    } 
+//      hull(){
+//        translate(MountTran)rotate([0,90,0]) cylinder(d= dBall-5, 5, $fn = 64, center = true); // Ball Moun
+//        translate([-18,-6,6.5])rotate([0,90,0]) cube([dBall-10,dBall-4,5], center = true); //Mount
+//      }
+//      translate(MountTran)rotate([0,90,0]) cylinder(d= 8, 10, $fn = 64, center = true); // Ball Moun
+      
+//      hull(){
+//        translate([6,-20,-0])rotate([0,0,0]) cylinder(d= 10, 12, $fn = 64, center = true); // Ball Mount
+////        translate([6,-20,4])rotate([0,90,0])  cube([5,dBall,5], center = true); //Mount
+//      } 
     hull(){
       translate([-60,-5,24])rotate([0,-90,165])skin(clip4); 
       translate([10,20,65])rotate([0,0,0])rotate([-90,40,0])pinkie_joint();
@@ -186,14 +216,18 @@ difference(){
   }
 //  #translate([-8,-23,63])rotate([0,40,0])cylinder(d = dMount, 15, center = true);
   translate([10,20,65])rotate([0,0,0])rotate([-90,40,0])translate([0,hei_thumb,-len_thumb])rotate(ang_thumb)ovalEllipsoid([43*2,35*2,53],[40*2,35*2,53], center = false); //thumb blob
-// # translate([10,20,65])rotate([0,0,0])rotate([-90,40,0])origin_ring()translate([3,5,5])sphere(d= 40.5, $fn = 64); // trackbaaaaaall?
- translate([-0,-25,52])rotate([0,40,-30]){
-  sphere(d= dBall, $fn = 64); // Ball Mount
-  translate([ 18, 0,0])cylinder(d= 4, 15, $fn = 64, center = true); // Ball Mount
-  translate([-18,-0,0])cylinder(d= 4, 20, $fn = 64, center = true); // Ball Mount
-  } 
+  
+    translate([-0,-10,51])rotate([0,40,-10]) {
+      translate([-22,-5,0])rotate([0,0,0])cylinder(d= 5, 20, $fn = 64, center = true);
+      translate([12,-25,-5])rotate([0,0,0])cylinder(d= 5, 20, $fn = 64, center = true); 
+    }
+//// # translate([10,20,65])rotate([0,0,0])rotate([-90,40,0])origin_ring()translate([3,5,5])sphere(d= 40.5, $fn = 64); // trackbaaaaaall?
+// translate([-0,-25,52])rotate([0,40,-30]){
+//  sphere(d= dBall, $fn = 64); // Ball Mount
+//  translate([ 18, 0,0])cylinder(d= 4, 15, $fn = 64, center = true); // Ball Mount
+//  translate([-18,-0,0])cylinder(d= 4, 20, $fn = 64, center = true); // Ball Mount
+//  } 
 }
-
 
 //Main
 translate([10,20,65])rotate([0,0,0])rotate([-90,40,0])
@@ -231,8 +265,23 @@ module blob() {  // mock up of hand structures
 // translate([wid_pin,0,-len_mid])rotate(ang_pin)translate([0,18,34])rotate(ang_ind)translate([10,30,-5])ovalEllipsoid([0,0,0],[55*2,40*2,70], center = true); // palm blob
   translate([wid_pin,0,-len_mid])rotate(ang_ring)translate([0,30,30])rotate(ang_ind)translate([10,25,20])ovalEllipsoid([20*2,25*2,60],[30*2,25*2,60], center = true); // ring fingers blob
 }
-
-
+ 
+module Mount() {
+  difference(){
+    union(){
+      translate([-0,-10,51])rotate([0,40,-10]){ // mounts
+        translate([-22,-5,8])rotate([0,0,0]) cylinder(d= 10, 7, $fn = 64, center = true); 
+        translate([12,-25,3])rotate([0,0,0]) cylinder(d= 10, 10, $fn = 64, center = true); 
+      } 
+    }
+    //CUTS
+    translate([-0,-10,51])rotate([0,40,-10]) {
+      translate([-22,-5,0])rotate([0,0,0])cylinder(d= 5, 20, $fn = 64, center = true);
+      translate([12,-25,-5])rotate([0,0,0])cylinder(d= 5, 10, $fn = 64, center = true); 
+    }
+  }
+}
+//Mount();
 // ---------------------- Old experiment
 //module thumb_ring() {
 //  function shape() = ellipse(2, 7);

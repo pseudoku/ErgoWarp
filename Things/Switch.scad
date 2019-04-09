@@ -105,7 +105,7 @@ module Cutter()
 // TODO: add alps support?
 module Keyhole(tol = .1, cutThickness = 3.25, clipLength = 0)
 {
-  $fn = 40;
+  $fn = 10;
   bottom_length = 13.9+tol;
    plate_thickness = 3.51; //mm
   holeLength = bottom_length+tol*2;
