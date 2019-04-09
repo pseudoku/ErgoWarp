@@ -105,7 +105,7 @@ Notes on column with compact switches.
 ### Thumb Cluster Design
 I have created stick representation of my thumb in OpenSCAD and initial attempts sought to pack as many switches near the ideal thumb motion without considering collision. While keys were accessible they did not produce efficient press and produced strain because thumb position. I've replicated and tested other notable design philosophy: datahard, manuform, and dmote to ended up with following design criteria ordered in priority:
 
-![Initial Design](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/ThumbExample.png)
+![Initial Design](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/ThumbTrackPoint.png)
 
 * **Place highest priority on thumb home. cluster must be as close to thumb neutral position and orientation**
 
