@@ -5,17 +5,16 @@ Design Log and Code Repo for ''''Customizable'''' Split Keyboard
 ![Prototype Rev 10](https://raw.githubusercontent.com/pseudoku/Warped-keyboard/master/Photo/Proto10b.jpg)
 
 ## Index
- * [Introduction](#Introduction)
- * Design Goals
- * Design Justifications
-  * Row Placement
-  * Column Placement
-  * Compact Switches
-  * Thumb Cluster Design
-  * Palm Rest Design
-  * Tracking Device Design
- * Observation
- * Alternate Layout
+* [Introduction](#introduction)
+* [Design Goals](#design-goals)
+* [Design Justifications](#design-justifications)
+  * [Row Placement](#row-placement)
+  * [Column Placement](#column-design)
+  * [Compact Switches](#compact-switches)
+  * [Thumb Cluster Design](#thumb-cluster-design)
+  * [Palm Rest Design](#palm-rest-design)
+  * [Tracking Device Design](#tracking-device--incomplete-)
+* [Alternate Layout](#alternate-layout-warpman)
 
 ## Introduction
 
@@ -31,7 +30,7 @@ Before I exhaust your waning attention span, I will attempt to describe my conce
 
 Glory to Datahand and Tron, our ergo forefathers.
 
-## Design Goals:
+## Design Goals
 * Customizable parametric key placement
 * Minimize finger movement
 * Dense and comfortable thumb cluster
